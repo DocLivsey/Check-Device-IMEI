@@ -6,11 +6,6 @@ import structlog
 logger = structlog.get_logger(__name__)
 
 
-def settings_to_string():
-    return '\n'.join('' + '{:24} = {}'.format(var.name, var.value)
-                   for var in sorted(Settings))
-
-
 class Settings(Enum):
     TELEGRAM_BOT_TOKEN_KEY = environ.get('TELEGRAM_BOT_TOKEN_KEY', None)
     API_TOKEN = environ.get('API_TOKEN', None)
@@ -18,8 +13,12 @@ class Settings(Enum):
     API_BASE_PATH = environ.get('API_BASE_PATH', None)
     API_VERSION = environ.get('API_VERSION', None)
 
+    @staticmethod
+    def to_string():
+        return '\n'.join('' + '{:24} = {}'.format(var.name, var.value)
+                       for var in sorted(Settings))
 
 logger.info(
     'read environment variables',
-    settings=settings_to_string()
+    settings=Settings.to_string()
 )

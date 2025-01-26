@@ -15,7 +15,7 @@ def bot_logger(function):
             Start running {function.__name__} 
             With settings and arguments
             ''',
-            settings=to_string(),
+            settings=Settings.to_string(),
             args=args,
             kwargs=kwargs
         )
