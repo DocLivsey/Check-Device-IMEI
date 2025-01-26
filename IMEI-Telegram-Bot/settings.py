@@ -13,11 +13,12 @@ class Settings(Enum):
     API_BASE_PATH = environ.get('API_BASE_PATH', None)
     API_VERSION = environ.get('API_VERSION', None)
 
-    def __str__(self):
+    @staticmethod
+    def to_string():
         return '\n'.join('' + '{:24} = {}'.format(var.name, var.value)
                        for var in sorted(Settings))
 
 logger.info(
     'read environment variables',
-    settings=f'{Settings}'
+    settings=Settings.to_string()
 )
