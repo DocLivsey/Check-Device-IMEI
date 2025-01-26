@@ -25,5 +25,4 @@ USER appuser
 
 COPY . .
 
-EXPOSE 8000
-CMD ["python3", "-m", "assistant_bot.run_bot"]
+CMD ["python3", "-m", "imei_bot.IMEIbot"]
