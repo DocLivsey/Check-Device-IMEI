@@ -13,9 +13,8 @@ def bot_logger(function):
         logger.info(
             f'''
             Start running {function.__name__} 
-            With settings and arguments
+            With arguments
             ''',
-            settings=Settings.to_string(),
             args=args,
             kwargs=kwargs
         )
