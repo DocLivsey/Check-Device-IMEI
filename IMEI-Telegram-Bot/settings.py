@@ -15,8 +15,8 @@ class Settings(Enum):
 
     @staticmethod
     def to_string():
-        return '\n'.join('' + '{:24} = {}'.format(var.name, var.value)
-                       for var in sorted(Settings))
+        string = ', '.join(f'{var.name} = {var.value}' for var in Settings)
+        return f'({string})'
 
 logger.info(
     'read environment variables',
