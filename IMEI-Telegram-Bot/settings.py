@@ -13,8 +13,6 @@ class Settings(Enum):
     API_BASE_PATH = environ.get('API_BASE_PATH', None)
     API_VERSION = environ.get('API_VERSION', None)
 
-settings = Settings()
-
 logger.info(
     'read environment variables',
     settings='\n'.join('' + '{:24} = {}'.format(var.name, var.value)
