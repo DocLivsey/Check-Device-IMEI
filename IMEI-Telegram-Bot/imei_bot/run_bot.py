@@ -1,6 +1,9 @@
+import asyncio
+
 import structlog
 
 from settings import Settings
+from imei_bot.IMEIbot import run
 
 logger = structlog.get_logger(__name__)
 
@@ -22,3 +25,12 @@ def bot_logger(function):
             logger.error('Exception occurred', exc_info=exc)
 
     return wrapper
+
+
+@bot_logger
+def main():
+    asyncio.run(run())
+
+
+if __name__ == '__main__':
+    main()
