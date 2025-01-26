@@ -25,4 +25,4 @@ USER appuser
 
 COPY . .
 
-CMD ["python3", "-m", "imei_bot.IMEIbot"]
+CMD ["python3", "-m", "imei_bot.run_bot"]
