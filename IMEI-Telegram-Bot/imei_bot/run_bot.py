@@ -2,7 +2,6 @@ import asyncio
 
 import structlog
 
-from settings import Settings
 from imei_bot.IMEIbot import run
 
 logger = structlog.get_logger(__name__)
