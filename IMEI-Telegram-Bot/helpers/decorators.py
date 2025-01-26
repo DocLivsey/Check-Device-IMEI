@@ -7,7 +7,7 @@ def bot_logger(function):
     def wrapper(*args, **kwargs):
         logger.info(
             f'''
-            Start running {function.__name__} 
+            Start running {function.__name__}() 
             With arguments
             ''',
             args=args,
