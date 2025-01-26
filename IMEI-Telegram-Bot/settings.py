@@ -8,3 +8,5 @@ class Settings(Enum):
     API_URL = environ.get('API_URL', None)
     API_BASE_PATH = environ.get('API_BASE_PATH', None)
     API_VERSION = environ.get('API_VERSION', None)
+
+settings = Settings()
