@@ -1,0 +1,17 @@
+x-web-variables: &web-variables
+  DEBUG: dev
+  ALLOWED_HOSTS: http://localhost
+  HOST: http://localhost:8000/'
+  DATABASE_HOST: db
+  POSTGRES_DB: imei_db
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: strongpassword
+services:
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    environment: *web-variables
+    ports:
+      - 8000:8080
