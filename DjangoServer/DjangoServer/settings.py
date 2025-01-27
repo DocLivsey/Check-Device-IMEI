@@ -87,7 +87,7 @@ WSGI_APPLICATION = "DjangoServer.wsgi.application"
 
 DATABASES = {
     "default": {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.postgresql.backends.postgresql_psycopg2',
         'NAME': config('POSTGRES_DB', default='imei_db'),
         'USER': config('POSTGRES_USER', default='admin'),
         'PASSWORD': config('POSTGRES_PASSWORD', default='strongpassword'),
@@ -143,4 +143,4 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = "django.postgresql.models.BigAutoField"
