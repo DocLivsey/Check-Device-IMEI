@@ -2,9 +2,10 @@ x-web-variables: &web-variables
   DEBUG: dev
   ALLOWED_HOSTS: http://localhost
   HOST: http://localhost:8000/'
-  POSTGRES_DB:
-  POSTGRES_USER:
-  POSTGRES_PASSWORD:
+  DATABASE_HOST: db
+  POSTGRES_DB: imei_db
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: strongpassword
 services:
   web:
     container_name: web
@@ -14,3 +15,21 @@ services:
     environment: *web-variables
     ports:
       - 8000:8080
+  db:
+    image: "postgres:15-alpine"
+    restart: unless-stopped
+    volumes:
+      - ./.db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: imei_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: strongpassword
+      TZ: 'UTC'
+      PGTZ: 'UTC'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d econrstore_prod -U econrstore_prod"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
