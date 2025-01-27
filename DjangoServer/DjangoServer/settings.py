@@ -27,7 +27,7 @@ config = AutoConfig(search_path=BASE_DIR)
 SECRET_KEY = "django-insecure-k6+s^eq(qcq79qy(v=kt=z580de_1tkgv8g)mq$%h=f%17ag!m"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default='dev') == 'debug' or 'dev' or 'development'
 
 ALLOWED_HOSTS = []
 
