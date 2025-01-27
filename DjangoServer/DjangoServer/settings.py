@@ -88,11 +88,11 @@ WSGI_APPLICATION = "DjangoServer.wsgi.application"
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('POSTGRES_DB'),
-        'USER': config('POSTGRES_USER'),
-        'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': config('DJANGO_DATABASE_HOST'),
-        'PORT': config('DJANGO_DATABASE_PORT', cast=int),
+        'NAME': config('POSTGRES_DB', default='imei_db'),
+        'USER': config('POSTGRES_USER', default='admin'),
+        'PASSWORD': config('POSTGRES_PASSWORD', default='strongpassword'),
+        'HOST': config('DATABASE_HOST', default='localhost'),
+        'PORT': config('DJANGO_DATABASE_PORT', cast=int, default=5432),
         'CONN_MAX_AGE': config('CONN_MAX_AGE', cast=int, default=60),
         'OPTIONS': {
             'connect_timeout': 10,
