@@ -1,0 +1,15 @@
+x-api-variables: &api-variables
+  TELEGRAM_BOT_TOKEN_KEY: 7546803808:AAEdPITUtJQrwTGwRFvQRHTwmoD7BDn-LpY
+  API_TOKEN: ''
+  API_URL: ''
+  API_BASE_PATH: ''
+  API_VERSION: ''
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment: *api-variables
+    ports:
+      - 8080:8080
