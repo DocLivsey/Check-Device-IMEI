@@ -2,9 +2,9 @@ FROM --platform=$BUILDPLATFORM python:3.7-alpine AS builder
 
 WORKDIR /app
 
-COPY requirements.txt /app
+COPY ../requirements.txt /app
 RUN pip3 install -r requirements.txt --no-cache-dir
-COPY . /app
+COPY .. /app
 
 ENTRYPOINT ["python3"]
 EXPOSE 8000
