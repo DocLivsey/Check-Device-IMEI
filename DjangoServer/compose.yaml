@@ -1,9 +1,5 @@
 x-web-variables: &web-variables
-  TELEGRAM_BOT_TOKEN_KEY: 7546803808:AAEdPITUtJQrwTGwRFvQRHTwmoD7BDn-LpY
-  API_TOKEN: ''
-  API_URL: ''
-  API_BASE_PATH: ''
-  API_VERSION: ''
+  DEBUG: dev
 services:
   web:
     container_name: web
