@@ -1,5 +1,6 @@
 x-web-variables: &web-variables
   DEBUG: dev
+  ALLOWED_HOSTS: http://localhost
 services:
   web:
     container_name: web
