@@ -1,5 +1,6 @@
 import structlog
 from aiogram import Router, types
+from aiogram.filters import Command
 
 from settings import Settings
 from helpers.decorators import bot_logger
@@ -9,6 +10,12 @@ router = Router()
 
 
 @bot_logger
-@router.message()
-async def start(message: types.Message):
+@router.message(Command('start'))
+async def start_handler(message: types.Message):
+    await message.answer('hello')
+
+
+@bot_logger
+@router.message(Command('help'))
+async def help_handler(message: types.Message):
     await message.answer('hello')
