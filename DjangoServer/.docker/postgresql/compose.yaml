@@ -3,7 +3,7 @@ services:
     image: "postgres:15-alpine"
     restart: unless-stopped
     volumes:
-      - ./.docker/postgresql/db:/var/lib/postgresql/data
+      - ./db:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
