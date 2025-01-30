@@ -1,12 +1,12 @@
 FROM --platform=$BUILDPLATFORM python:3.7-alpine AS builder
 
+RUN apk add --no-cache postgresql-dev gcc musl-dev python3-dev
+
 WORKDIR /app
 
 COPY ../requirements.txt /app
 RUN pip3 install -r requirements.txt --no-cache-dir
 COPY .. /app
-
-RUN python3 manage.py migrate
 
 ENTRYPOINT ["python3"]
 EXPOSE 8000
