@@ -22,4 +22,5 @@ from Auth.views import HelloView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('hello/', HelloView.as_view(), name='hello'),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
