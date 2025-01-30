@@ -11,5 +11,5 @@ router = Router()
 
 @bot_logger
 @router.message(Command('check_imei'))
-async def start_handler(message: types.Message):
+async def check_imei_handler(message: types.Message):
     await message.answer('hello')
