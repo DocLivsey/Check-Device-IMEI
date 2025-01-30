@@ -17,6 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+from Auth.views import TelegramAuthView
 from rest_framework.authtoken.views import obtain_auth_token
 
 api_base_path = 'api/v1/'
@@ -24,4 +25,5 @@ api_base_path = 'api/v1/'
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(f'{api_base_path}api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path(f'{api_base_path}api-token-telegram-auth/', TelegramAuthView.as_view(), name='api_token_telegram_auth'),
 ]
