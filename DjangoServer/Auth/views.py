@@ -1,3 +1,4 @@
+from django.db.utils import IntegrityError
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -9,7 +10,7 @@ class TelegramAuthView(APIView):
 
     def post(self, request):
         telegram_user = request.data.get('telegram_user')
-        telegram_user_id = telegram_user.get('telegram_id')
+        telegram_user_id = int(telegram_user.get('telegram_id'))
         telegram_user_username = telegram_user.get('telegram_username')
 
         if not telegram_user_id:
@@ -19,10 +20,17 @@ class TelegramAuthView(APIView):
 
         if not profile:
             if telegram_user_username:
-                user = User.objects.create(username=f"tg@{telegram_user_username}")
+                try:
+                    user = User.objects.create(username=f"tg@{telegram_user_username}")
+                except IntegrityError as error:
+                    print(error)
+                    user = User.objects.get(username=f"tg@{telegram_user_username}")
             else:
-                user = User.objects.create(username=f"tg@{telegram_user_id}")
-            profile = TelegramUser.objects.create(user=user, telegram_id=telegram_user)
+                try:
+                    user = User.objects.create(username=f"tg@{telegram_user_id}")
+                except IntegrityError:
+                    user = User.objects.get(username=f"tg@{telegram_user_id}")
+            profile = TelegramUser.objects.create(user=user, telegram_id=telegram_user_id)
             user = profile.user
         else:
             user = profile.user
