@@ -4,8 +4,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 
 
-def init_routers(app_: FastAPI, router: APIRouter) -> None:
-    app_.include_router(router)
+def create_app(router: APIRouter) -> FastAPI:
+    app = FastAPI(
+        title="FastAPI starter kit",
+        description="FastAPI starter kit that is needed for every fastapi project.",
+        version="1.0.0",
+        middleware=make_middleware(),
+    )
+    init_routers(app=app, router=router)
+    return app
+
+
+def init_routers(app: FastAPI, router: APIRouter) -> None:
+    app.include_router(router)
 
 
 origins = [
