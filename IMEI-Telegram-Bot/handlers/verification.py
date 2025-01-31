@@ -14,7 +14,7 @@ router = Router()
 @router.message(Command('check_imei'))
 async def check_imei_handler(message: types.Message):
     response = requests.get(
-        url='http://192.168.0.107:8000/api/v1/hello/',
+        url='http://192.168.0.107:8080/api/v1/hello/',
         headers={
             'Authorization': 'Token 1994b2e652bf40d047300d2928b740fa8afc94f5'
         }
