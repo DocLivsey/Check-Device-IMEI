@@ -16,7 +16,10 @@ def create_app(router: APIRouter) -> FastAPI:
 
 
 def init_routers(app: FastAPI, router: APIRouter) -> None:
-    app.include_router(router)
+    app.include_router(
+        router,
+        prefix="/api/v1",
+    )
 
 
 origins = [
