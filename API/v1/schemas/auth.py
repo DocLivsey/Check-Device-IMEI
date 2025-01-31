@@ -10,6 +10,6 @@ class TelegramUserSchema(BaseModel):
     telegram_user: TelegramUser
 
 
-class Token(BaseModel):
+class TokenSchema(BaseModel):
     token: str
     user: TelegramUserSchema
