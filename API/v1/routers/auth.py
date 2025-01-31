@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from v1.endpoints.auth.auth import auth_router as auth_endpoints
+from v1.schemas.auth import TokenSchema
 
 router = APIRouter()
 
@@ -12,5 +13,6 @@ router.include_router(
         500: {"description": "Internal Server Error"},
         404: {"description": "Not found"},
         403: {"description": "Not authorized"},
+        200: {"token": TokenSchema}
     },
 )
