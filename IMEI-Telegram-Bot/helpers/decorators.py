@@ -10,7 +10,7 @@ def bot_logger(function):
     def sync_wrapper(*args, **kwargs):
         logger.info(
             f'''
-            Start running {function.__name__}() 
+            Start running sync {function.__name__}() 
             With arguments
             ''',
             args=args,
@@ -27,7 +27,7 @@ def bot_logger(function):
     async def async_wrapper(*args, **kwargs):
         logger.info(
             f'''
-            Start running {function.__name__}() 
+            Start running async {function.__name__}() 
             With arguments
             ''',
             args=args,
