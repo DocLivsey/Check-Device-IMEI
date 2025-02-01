@@ -1,5 +1,3 @@
-from typing import Dict
-
 from pydantic import BaseModel
 
 
@@ -15,7 +13,7 @@ class TokenSchema(BaseModel):
     user: TelegramUserSchema
     
     
-def to_telegram_user(telegram_user_data: Dict) -> TelegramUserSchema:
+def to_telegram_user(telegram_user_data: dict) -> TelegramUserSchema:
     telegram_id = telegram_user_data.get('telegram_id') if 'telegram_id' in telegram_user_data else -1
     username = telegram_user_data.get('username') if 'username' in telegram_user_data else 'Undefined'
     first_name = telegram_user_data.get('first_name') if 'first_name' in telegram_user_data else 'Undefined'
@@ -29,7 +27,7 @@ def to_telegram_user(telegram_user_data: Dict) -> TelegramUserSchema:
     )
 
 
-def to_token(token_data: Dict) -> TokenSchema:
+def to_token(token_data: dict) -> TokenSchema:
     token = token_data.get('token') if 'token' in token_data else 'Undefined'
     user = token_data.get('user') if 'user' in token_data else {}
 
