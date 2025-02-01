@@ -33,7 +33,7 @@ def auth_required(users_tokens: dict, user_id: int, message: Message):
 
 def authenticate(users_tokens: dict, user_id: int):
     logger.info(
-        'tring to authenticate user',
+        'trying to authenticate user',
         user=user_id
     )
     
