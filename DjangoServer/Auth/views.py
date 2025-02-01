@@ -9,28 +9,20 @@ from Auth.models import TelegramUser
 class TelegramAuthView(APIView):
 
     def post(self, request):
-        telegram_user = request.data.get('telegram_user')
-        telegram_user_id = int(telegram_user.get('telegram_id'))
-        telegram_user_username = telegram_user.get('telegram_username')
+        telegram_id = int(request.data.get('telegram_id'))
+        username = request.data.get('username')
 
-        if not telegram_user_id:
+        if not telegram_id:
             return Response({"error": "Telegram ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        profile = TelegramUser.objects.filter(telegram_id=telegram_user_id).first()
+        profile = TelegramUser.objects.filter(telegram_id=telegram_id).first()
 
         if not profile:
-            if telegram_user_username:
-                try:
-                    user = User.objects.create(username=f"tg@{telegram_user_username}")
-                except IntegrityError as error:
-                    print(error)
-                    user = User.objects.get(username=f"tg@{telegram_user_username}")
-            else:
-                try:
-                    user = User.objects.create(username=f"tg@{telegram_user_id}")
-                except IntegrityError:
-                    user = User.objects.get(username=f"tg@{telegram_user_id}")
-            profile = TelegramUser.objects.create(user=user, telegram_id=telegram_user_id)
+            try:
+                user = User.objects.create(username=f"tg@{telegram_id}")
+            except IntegrityError:
+                user = User.objects.get(username=f"tg@{telegram_id}")
+            profile = TelegramUser.objects.create(user=user, telegram_id=telegram_id)
             user = profile.user
         else:
             user = profile.user
@@ -39,6 +31,7 @@ class TelegramAuthView(APIView):
 
         return Response(
             {
-                "token": token.key
+                'token': token.key,
+                'telegram_id': telegram_id,
             }
         )
