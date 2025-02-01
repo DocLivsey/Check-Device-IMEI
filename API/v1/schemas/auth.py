@@ -1,9 +1,13 @@
+from typing import Dict
+
 from pydantic import BaseModel
 
 
 class TelegramUserSchema(BaseModel):
-    id: int
+    telegram_id: int
     username: str
+    first_name: str
+    last_name: str
     
 
 class TokenSchema(BaseModel):
@@ -11,5 +15,9 @@ class TokenSchema(BaseModel):
     user: TelegramUserSchema
     
     
-def to_telegram_user():
-    pass
+def to_telegram_user(telegram_user_data: Dict) -> TelegramUserSchema:
+    telegram_id = telegram_user_data.get('telegram_id') if 'telegram_id' in telegram_user_data else -1
+    
+    return TelegramUserSchema(
+        telegram_id=telegram_id,
+    )
