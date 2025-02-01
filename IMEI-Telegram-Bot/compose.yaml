@@ -4,7 +4,7 @@ x-bot-variables: &bot-variables
   API_HOST: ''
   API_BASE_PATH: ''
   API_VERSION: ''
-  API_TAKE_TOKEN_URL: ''
+  API_URL_TAKE_TOKEN: ''
 services:
   bot:
     container_name: imei-bot
