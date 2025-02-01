@@ -11,11 +11,17 @@ router = Router()
 
 @bot_logger
 @router.message(Command('start'))
-async def start_handler(message: types.Message):
+async def start_handler(
+        message: types.Message,
+        users_tokens: dict
+):
     await message.answer(f'hello, {message.from_user}')
 
 
 @bot_logger
 @router.message(Command('help'))
-async def help_handler(message: types.Message):
+async def help_handler(
+        message: types.Message,
+        users_tokens: dict
+):
     await message.answer('hello')
