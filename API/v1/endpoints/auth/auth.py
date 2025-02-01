@@ -11,6 +11,7 @@ auth_router = APIRouter()
 @auth_router.post(f'{Settings.API_URL_TAKE_TOKEN}', response_model=TokenSchema)
 async def telegram_token_auth(from_user_data: dict):
     telegram_user: TelegramUserSchema
+    response: requests.Response
     try:
         telegram_user = to_telegram_user(from_user_data)
 
@@ -33,3 +34,17 @@ async def telegram_token_auth(from_user_data: dict):
             'status_code' : 400,
             'detail': str(exception)
         }
+    
+    if response.status_code != 200:
+        return {
+            'status_code' : response.status_code,
+            'detail': result.get('error', 'Server error')
+        }
+        
+    if 'token' and 'telegram_id' not in response.json():
+        return {
+            status_code: 400,
+            'detail': 'Invalid response from server'
+        }
+        
+    return response.json()
