@@ -12,7 +12,7 @@ router = Router()
 @bot_logger
 @router.message(Command('start'))
 async def start_handler(message: types.Message):
-    await message.answer('hello')
+    await message.answer(f'hello, {message.from_user}')
 
 
 @bot_logger
