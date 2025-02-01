@@ -1,7 +1,7 @@
 x-bot-variables: &bot-variables
   TELEGRAM_BOT_TOKEN_KEY: 7546803808:AAEdPITUtJQrwTGwRFvQRHTwmoD7BDn-LpY
   API_TOKEN: ''
-  API_URL: ''
+  API_HOST: ''
   API_BASE_PATH: ''
   API_VERSION: ''
 services:
