@@ -1,15 +1,15 @@
 from pydantic import BaseModel
 
 
-class TelegramUser(BaseModel):
+class TelegramUserSchema(BaseModel):
     id: int
     username: str
-
-
-class TelegramUserSchema(BaseModel):
-    telegram_user: TelegramUser
-
+    
 
 class TokenSchema(BaseModel):
     token: str
     user: TelegramUserSchema
+    
+    
+def to_telegram_user():
+    pass
