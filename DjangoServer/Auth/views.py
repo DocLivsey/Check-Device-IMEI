@@ -11,6 +11,8 @@ class TelegramAuthView(APIView):
     def post(self, request):
         telegram_id = int(request.data.get('telegram_id'))
         username = request.data.get('username')
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
 
         if not telegram_id:
             return Response({"error": "Telegram ID is required"}, status=status.HTTP_400_BAD_REQUEST)
@@ -19,9 +21,17 @@ class TelegramAuthView(APIView):
 
         if not profile:
             try:
-                user = User.objects.create(username=f"tg@{telegram_id}")
+                user = User.objects.create(
+                    username=f"tg@{telegram_id}",
+                    first_name=first_name,
+                    last_name=last_name,
+                )
             except IntegrityError:
-                user = User.objects.get(username=f"tg@{telegram_id}")
+                user = User.objects.get(
+                    username=f"tg@{telegram_id}",
+                    first_name=first_name,
+                    last_name=last_name,
+                )
             profile = TelegramUser.objects.create(user=user, telegram_id=telegram_id)
             user = profile.user
         else:
