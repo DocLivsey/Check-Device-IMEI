@@ -7,7 +7,7 @@ from settings import Settings
 logger = structlog.get_logger(__name__)
 
 
-async def auth_required(users_tokens: dict, user_id: int, message: Message):
+def auth_required(users_tokens: dict, user_id: int, message: Message):
     logger.info(
         'requere authentication',
         for_user=user_id
@@ -28,7 +28,7 @@ async def auth_required(users_tokens: dict, user_id: int, message: Message):
             exception=exception.with_traceback(),
         )
         
-        await message.answer('You are not authenticated')
+        message.answer('You are not authenticated')
 
 
 def authenticate(users_tokens: dict, user_id: int):
