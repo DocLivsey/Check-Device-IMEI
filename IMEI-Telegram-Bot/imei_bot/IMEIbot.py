@@ -31,6 +31,7 @@ async def run():
 
     await dispatcher.start_polling(
         check_imei_bot,
+        users_tokens={}
     )
 
 
