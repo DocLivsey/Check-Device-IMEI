@@ -1,4 +1,5 @@
 import asyncio
+import functools
 
 import structlog
 
@@ -6,7 +7,13 @@ logger = structlog.get_logger(__name__)
 
 
 def bot_logger(function):
-    
+
+    logger.debug(
+        'given argument',
+        function=function
+    )
+
+    @functools.wraps(function)
     def sync_wrapper(*args, **kwargs):
         logger.info(
             f'''
@@ -23,7 +30,8 @@ def bot_logger(function):
                 'Exception occurred in sync process', 
                 exc_info=exc
             )
-    
+
+    @functools.wraps(function)
     async def async_wrapper(*args, **kwargs):
         logger.info(
             f'''
