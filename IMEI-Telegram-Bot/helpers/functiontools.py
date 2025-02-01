@@ -37,7 +37,7 @@ def authenticate(users_tokens: dict, user_id: int):
         user=user_id
     )
     
-    if not users_tokens[user_id]:
+    if (not users_tokens[user_id]) or (user_id not in users_tokens):
         logger.info(
             'user not authenticated, sending request to authenticate user',
             user=user_id
@@ -46,6 +46,7 @@ def authenticate(users_tokens: dict, user_id: int):
         response = requests.post(
             url=f'{Settings.API_HOST}{Settings.API_BASE_PATH}{Settings.API_VERSION}{Settings.API_URL_TAKE_TOKEN}',
         )
+        
         if response.status_code != 200:
             logger.error(
                 'Failed to get token', 
