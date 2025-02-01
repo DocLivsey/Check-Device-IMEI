@@ -41,4 +41,6 @@ def bot_logger(function):
                 exc_info=exc
             )
 
-    return async_wrapper if asyncio.iscoroutinefunction(function) else sync_wrapper
+    return async_wrapper \
+        if asyncio.iscoroutinefunction(function.__wrapped__ if hasattr(function, '__wrapped__') else function) \
+        else sync_wrapper
