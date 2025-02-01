@@ -1,12 +1,18 @@
 import requests
 import structlog
+from aiogram.types import Message
 
 from settings import Settings
 
 logger = structlog.get_logger(__name__)
 
 
-def auth_required(users_tokens: dict, user_id: int):
+async def auth_required(users_tokens: dict, user_id: int, message: Message):
+    logger.info(
+        'requere authentication',
+        for_user=user_id
+    )
+    
     try:
         authenticate(users_tokens, user_id)
         
@@ -22,7 +28,7 @@ def auth_required(users_tokens: dict, user_id: int):
             exception=exception.with_traceback(),
         )
         
-        return
+        await message.answer('You are not authenticated')
 
 
 def authenticate(users_tokens: dict, user_id: int):
