@@ -4,6 +4,7 @@ from aiogram.filters import Command
 
 from settings import Settings
 from helpers.decorators import bot_logger
+from helpers.functiontools import auth_required
 
 logger = structlog.get_logger(__name__)
 router = Router()
@@ -15,6 +16,8 @@ async def start_handler(
         message: types.Message,
         users_tokens: dict
 ):
+    auth_required(users_tokens, message.from_user.id, message)
+        
     await message.answer(f'hello, {message.from_user}')
 
 
