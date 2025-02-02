@@ -3,7 +3,7 @@ import structlog
 from aiogram.types import Message, User
 from pydantic import ValidationError
 
-from schemas.auth import TelegramUserSchema, to_telegram_user, TokenSchema, to_token
+from schemas.auth import TelegramUserSchema, to_telegram_user, TokenSchema, to_token, from_telegram_user
 from settings import api_host, api_base_path, api_version, api_auth_url, api_url_take_token
 
 logger = structlog.get_logger(__name__)
@@ -102,12 +102,12 @@ def request_auth_token(user: User) -> TokenSchema:
             'sending request to API to get token with data',
             api_url=url,
             user=user_id,
-            data=telegram_user.dict()
+            data=from_telegram_user(telegram_user)
         )
         
         response = requests.post(
             url=url,
-            data=telegram_user.dict()
+            data=from_telegram_user(telegram_user)
         )
         
     except requests.RequestException as http_error:
