@@ -64,4 +64,11 @@ https://imeicheck.net/
 
 2. В каком виде присылать готовое выполнение - в тз достаточно информации и есть ответ на этот вопрос
 
-Для сдачи задания  писать в телегу @ansukhareva. 
+Для сдачи задания писать в телегу @ansukhareva. 
+
+## If you need Help
+
+> DjangoServer/compose.yaml
+> ```
+> sudo chmod -R 755 .docker/postgresql/db && docker compose up --build
+> ```
