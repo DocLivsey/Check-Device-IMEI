@@ -95,4 +95,12 @@ async def telegram_token_auth(from_user_data: dict):
             'detail': 'Invalid response from server'
         }
         
+    logger.info(
+        'Successfully retrieved token from Django server REST API',
+        token=response.json().get('token'),
+        telegram_id=response.json().get('telegram_id'),
+        endpoint=url,
+        data_from_user=from_user_data,
+    )
+        
     return response.json()
