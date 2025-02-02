@@ -42,7 +42,6 @@ def authenticate(users_tokens: dict, user_id: int):
         logger.info(
             'user not cached yet, sending request to authenticate user',
             user=user_id,
-            token=users_tokens[user_id]
         )
         
         users_tokens[user_id] = request_auth_token(user_id)
