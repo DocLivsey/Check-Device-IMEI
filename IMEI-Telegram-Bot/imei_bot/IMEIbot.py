@@ -2,14 +2,14 @@ import structlog
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from settings import Settings
+from settings import telegram_bot_token
 from helpers.decorators import bot_logger
 from handlers.greeting import router as greeting_router
 from handlers.verification import router as verification_router
 
 logger = structlog.get_logger(__name__)
 
-bot_token = Settings.TELEGRAM_BOT_TOKEN_KEY.value
+bot_token = str(telegram_bot_token)
 check_imei_bot = Bot(token=bot_token)
 storage = MemoryStorage()
 dispatcher = Dispatcher(storage=storage)

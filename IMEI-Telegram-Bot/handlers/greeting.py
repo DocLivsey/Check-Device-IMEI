@@ -2,7 +2,6 @@ import structlog
 from aiogram import Router, types
 from aiogram.filters import Command
 
-from settings import Settings
 from helpers.decorators import bot_logger
 from helpers.functiontools import auth_required
 

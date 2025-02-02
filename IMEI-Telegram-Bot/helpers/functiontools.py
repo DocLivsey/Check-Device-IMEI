@@ -2,7 +2,7 @@ import requests
 import structlog
 from aiogram.types import Message
 
-from settings import Settings
+from settings import api_host, api_base_path, api_version, api_auth_url, api_url_take_token
 
 logger = structlog.get_logger(__name__)
 
@@ -74,7 +74,7 @@ def authenticate(users_tokens: dict, user_id: int):
 
 
 def request_auth_token(user_id: int) -> str:
-    url = f'{Settings.API_HOST.value}{Settings.API_BASE_PATH.value}{Settings.API_VERSION.value}{Settings.API_AUTH_URL.value}{Settings.API_URL_TAKE_TOKEN.value}'
+    url = f'{api_host}{api_base_path}{api_version}{api_auth_url}{api_url_take_token}'
     
     response: requests.Response
     try:
