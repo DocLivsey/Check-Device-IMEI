@@ -10,6 +10,7 @@ class Settings(Enum):
     SERVER_HOST = environ.get('API_URL', 'http://192.168.0.107:8000')
     API_BASE_PATH = environ.get('API_BASE_PATH', '/api')
     API_VERSION = environ.get('API_VERSION', '/v1')
+    API_AUTH_URL = environ.get('API_AUTH_URL', '/auth')
     API_URL_TAKE_TOKEN = environ.get('API_TAKE_TOKEN_URL', '/api-token-telegram-auth/')
 
     @staticmethod
