@@ -23,3 +23,13 @@ logger.info(
     'read environment variables',
     settings=Settings.to_string()
 )
+
+telegram_bot_token = Settings.TELEGRAM_BOT_TOKEN_KEY.value
+api_host = Settings.API_HOST.value
+api_base_path = Settings.API_BASE_PATH.value
+api_version = Settings.API_VERSION.value
+api_auth_url = Settings.API_AUTH_URL.value
+api_url_take_token = Settings.API_URL_TAKE_TOKEN.value
+
+if 'http' not in api_host:
+    api_host = 'http://' + api_host
