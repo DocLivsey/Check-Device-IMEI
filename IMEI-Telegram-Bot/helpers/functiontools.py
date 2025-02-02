@@ -85,21 +85,23 @@ def request_auth_token(user: User) -> str:
     last_name = user.last_name
 
     response: requests.Response
+    sending_data: dict = {
+        'telegram_id': user_id,
+        'username': username,
+        'first_name': first_name,
+        'last_name': last_name,
+    }
     try:
         logger.info(
-            'sending request to API to get token',
+            'sending request to API to get token with data',
             api_url=url,
             user=user_id,
+            data=sending_data
         )
         
         response = requests.post(
             url=url,
-            data={
-                'telegram_id': user_id,
-                'username': username,
-                'first_name': first_name,
-                'last_name': last_name,
-            }
+            data=sending_data
         )
         
     except requests.RequestException as http_error:
