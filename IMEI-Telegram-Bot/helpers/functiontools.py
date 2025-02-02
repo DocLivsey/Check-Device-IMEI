@@ -37,27 +37,31 @@ def authenticate(users_tokens: dict, user_id: int):
         user=user_id
     )
     
-    if (not users_tokens[user_id]) or (user_id not in users_tokens):
+    if user_id not in users_tokens:
+        
+        logger.info(
+            'user not cached yet, sending request to authenticate user',
+            user=user_id,
+            token=users_tokens[user_id]
+        )
+        
+        users_tokens[user_id] = request_auth_token(user_id)
+        
+        logger.info(
+            'User authenticated successfully',
+            user=user_id,
+            token=users_tokens[user_id]
+        )
+        
+        return
+    
+    if not users_tokens[user_id]:
         logger.info(
             'user not authenticated, sending request to authenticate user',
             user=user_id
         )
         
-        response = requests.post(
-            url=f'{Settings.API_HOST}{Settings.API_BASE_PATH}{Settings.API_VERSION}{Settings.API_URL_TAKE_TOKEN}',
-        )
-        
-        if response.status_code != 200:
-            logger.error(
-                'Failed to get token', 
-                status_code=response.status_code,
-                reason=response.reason,
-                response=response.text,
-            )
-            
-            raise Exception('Not Authenticated')
-        
-        users_tokens[user_id] = response.json()['token']
+        users_tokens[user_id] = request_auth_token(user_id)
         
         logger.info(
             'User authenticated successfully',
@@ -68,3 +72,29 @@ def authenticate(users_tokens: dict, user_id: int):
         return
     
     return
+
+
+def request_auth_token(user_id: int) -> str:
+    response = requests.post(
+            url=f'{Settings.API_HOST}{Settings.API_BASE_PATH}{Settings.API_VERSION}{Settings.API_URL_TAKE_TOKEN}',
+        )
+        
+    if response.status_code != 200:
+        logger.error(
+            'Failed to get token', 
+            status_code=response.status_code,
+            reason=response.reason,
+            response=response.text,
+        )
+        
+        raise Exception('Not Authenticated')
+    
+    if 'token' not in response.json():
+        logger.error(
+            'No token in response',
+            response=response.json(),
+        )
+        
+        raise Exception('Not Authenticated')
+        
+    return response.json()['token']
