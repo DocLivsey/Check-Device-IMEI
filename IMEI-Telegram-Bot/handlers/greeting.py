@@ -16,7 +16,7 @@ async def start_handler(
         message: types.Message,
         users_tokens: dict
 ):
-    auth_required(users_tokens, message.from_user.id, message)
+    await auth_required(users_tokens, message.from_user.id, message)
         
     await message.answer(f'hello, {message.from_user}')
 
