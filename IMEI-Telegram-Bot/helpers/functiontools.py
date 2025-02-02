@@ -1,20 +1,22 @@
 import requests
 import structlog
-from aiogram.types import Message
+from aiogram.types import Message, User
 
 from settings import api_host, api_base_path, api_version, api_auth_url, api_url_take_token
 
 logger = structlog.get_logger(__name__)
 
 
-async def auth_required(users_tokens: dict, user_id: int, message: Message):
+async def auth_required(users_tokens: dict, user: User, message: Message):
+    user_id: int = user.id
+
     logger.info(
         'requere authentication',
         for_user=user_id
     )
     
     try:
-        authenticate(users_tokens, user_id)
+        authenticate(users_tokens, user)
         
         logger.info(
             'User authenticated',
@@ -31,7 +33,9 @@ async def auth_required(users_tokens: dict, user_id: int, message: Message):
         await message.answer('You are not authenticated')
 
 
-def authenticate(users_tokens: dict, user_id: int):
+def authenticate(users_tokens: dict, user: User):
+    user_id: int = user.id
+
     logger.info(
         'trying to authenticate user',
         user=user_id
@@ -73,9 +77,13 @@ def authenticate(users_tokens: dict, user_id: int):
     return
 
 
-def request_auth_token(user_id: int) -> str:
+def request_auth_token(user: User) -> str:
     url = f'{api_host}{api_base_path}{api_version}{api_auth_url}{api_url_take_token}'
-    
+    user_id = user.id
+    username = user.username
+    first_name = user.first_name
+    last_name = user.last_name
+
     response: requests.Response
     try:
         logger.info(
@@ -85,7 +93,13 @@ def request_auth_token(user_id: int) -> str:
         )
         
         response = requests.post(
-                url=url,
+            url=url,
+            data={
+                'telegram_id': user_id,
+                'username': username,
+                'first_name': first_name,
+                'last_name': last_name,
+            }
         )
         
     except requests.RequestException as http_error:
