@@ -5,20 +5,20 @@ import requests
 
 logger = structlog.get_logger(__name__)
 
-from settings import Settings
+from settings import api_url_take_token, server_host, api_base_path, api_version
 from v1.schemas.auth import TokenSchema, TelegramUserSchema, to_telegram_user
 
 auth_router = APIRouter()
 
 
-@auth_router.post(f'{Settings.API_URL_TAKE_TOKEN}', response_model=TokenSchema)
+@auth_router.post(f'{api_url_take_token}', response_model=TokenSchema)
 async def telegram_token_auth(from_user_data: dict):
     logger.info(
         'Handle POST request to API for Telegram token authentication with',
         data_from_user=from_user_data,
     )
     
-    url = f'{Settings.SERVER_HOST.value}{Settings.API_BASE_PATH.value}{Settings.API_VERSION.value}{Settings.API_URL_TAKE_TOKEN.value}'
+    url = f'{server_host}{api_base_path}{api_version}{api_url_take_token}'
     telegram_user: TelegramUserSchema
     response: requests.Response
     try:
