@@ -14,6 +14,7 @@ router.include_router(
         500: {"description": "Internal Server Error"},
         404: {"description": "Not found"},
         403: {"description": "Not authorized"},
+        400: {"description": "Bad Request"},
         200: {"token": TokenSchema}
     },
 )
