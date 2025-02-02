@@ -81,7 +81,7 @@ async def telegram_token_auth(from_user_data: dict):
         
         return {
             'status_code' : response.status_code,
-            'detail': result.get('error', 'Server error')
+            'detail': response.reason
         }
         
     if 'token' and 'telegram_id' not in response.json():
@@ -91,7 +91,7 @@ async def telegram_token_auth(from_user_data: dict):
         )
         
         return {
-            status_code: 400,
+            'status_code': 400,
             'detail': 'Invalid response from server'
         }
         
