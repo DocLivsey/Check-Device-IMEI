@@ -1,7 +1,9 @@
 import requests
 import structlog
 from aiogram.types import Message, User
+from pydantic import ValidationError
 
+from schemas.auth import TelegramUserSchema, to_telegram_user, TokenSchema, to_token
 from settings import api_host, api_base_path, api_version, api_auth_url, api_url_take_token
 
 logger = structlog.get_logger(__name__)
@@ -48,7 +50,7 @@ def authenticate(users_tokens: dict, user: User):
             user=user_id,
         )
         
-        users_tokens[user_id] = request_auth_token(user)
+        users_tokens[user_id] = request_auth_token(user).token
         
         logger.info(
             'User authenticated successfully',
@@ -64,7 +66,7 @@ def authenticate(users_tokens: dict, user: User):
             user=user_id
         )
         
-        users_tokens[user_id] = request_auth_token(user)
+        users_tokens[user_id] = request_auth_token(user).token
         
         logger.info(
             'User authenticated successfully',
@@ -77,7 +79,7 @@ def authenticate(users_tokens: dict, user: User):
     return
 
 
-def request_auth_token(user: User) -> str:
+def request_auth_token(user: User) -> TokenSchema:
     url = f'{api_host}{api_base_path}{api_version}{api_auth_url}{api_url_take_token}'
     user_id = user.id
     username = user.username
@@ -85,23 +87,27 @@ def request_auth_token(user: User) -> str:
     last_name = user.last_name
 
     response: requests.Response
-    sending_data: dict = {
-        'telegram_id': user_id,
-        'username': username,
-        'first_name': first_name,
-        'last_name': last_name,
-    }
+    telegram_user: TelegramUserSchema
     try:
+        telegram_user = to_telegram_user(
+            {
+                'telegram_id': user_id,
+                'username': username,
+                'first_name': first_name,
+                'last_name': last_name,
+            }
+        )
+
         logger.info(
             'sending request to API to get token with data',
             api_url=url,
             user=user_id,
-            data=sending_data
+            data=telegram_user.dict()
         )
         
         response = requests.post(
             url=url,
-            data=sending_data
+            data=telegram_user.dict()
         )
         
     except requests.RequestException as http_error:
@@ -110,6 +116,20 @@ def request_auth_token(user: User) -> str:
             http_error=str(http_error),
         )
         
+        raise Exception('Not Authenticated')
+
+    except ValidationError as validation_error:
+        logger.error(
+            'Failed to mapping from object to DTO',
+            validation_error=str(validation_error),
+            data={
+                'telegram_id': user_id,
+                'username': username,
+                'first_name': first_name,
+                'last_name': last_name,
+            }
+        )
+
         raise Exception('Not Authenticated')
         
     if response.status_code != 200:
@@ -129,5 +149,17 @@ def request_auth_token(user: User) -> str:
         )
         
         raise Exception('Not Authenticated')
+
+    users_token: TokenSchema
+    try:
+        users_token = to_token(response.json())
+    except ValidationError as validation_error:
+        logger.error(
+            'Failed to mapping from object to DTO',
+            validation_error=str(validation_error),
+            data=response.json(),
+        )
+
+        raise Exception('Not Authenticated')
         
-    return response.json()['token']
+    return users_token
