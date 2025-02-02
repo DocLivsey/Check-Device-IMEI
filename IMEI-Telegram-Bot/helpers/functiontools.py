@@ -25,7 +25,7 @@ def auth_required(users_tokens: dict, user_id: int, message: Message):
         logger.error(
             'Failed to authenticate user',
             user_id=user_id,
-            exception=exception.with_traceback(),
+            exception=str(exception),
         )
         
         message.answer('You are not authenticated')
