@@ -34,4 +34,4 @@ api_auth_url = Settings.API_AUTH_URL.value
 api_url_take_token = Settings.API_URL_TAKE_TOKEN.value
 
 if 'http' not in api_host:
-    api_host = 'http://' + api_host
+    api_host = f'http://{api_host}:{api_port}'
