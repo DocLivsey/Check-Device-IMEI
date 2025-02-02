@@ -6,7 +6,7 @@ import requests
 logger = structlog.get_logger(__name__)
 
 from settings import api_url_take_token, server_host, api_base_path, api_version
-from v1.schemas.auth import TokenSchema, TelegramUserSchema, to_telegram_user
+from v1.schemas.auth import TokenSchema, TelegramUserSchema, to_telegram_user, to_token
 
 auth_router = APIRouter()
 
@@ -103,4 +103,4 @@ async def telegram_token_auth(from_user_data: dict):
         data_from_user=from_user_data,
     )
         
-    return response.json()
+    return to_token(response.json())
