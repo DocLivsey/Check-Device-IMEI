@@ -1,6 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import ValidationError
+import structlog
 import requests
+
+logger = structlog.get_logger(__name__)
 
 from settings import Settings
 from v1.schemas.auth import TokenSchema, TelegramUserSchema, to_telegram_user
@@ -10,13 +13,25 @@ auth_router = APIRouter()
 
 @auth_router.post(f'{Settings.API_URL_TAKE_TOKEN}', response_model=TokenSchema)
 async def telegram_token_auth(from_user_data: dict):
+    logger.info(
+        'Handle POST request to API for Telegram token authentication with',
+        data_from_user=from_user_data,
+    )
+    
+    url = f'{Settings.SERVER_HOST.value}{Settings.API_BASE_PATH.value}{Settings.API_VERSION.value}{Settings.API_URL_TAKE_TOKEN.value}'
     telegram_user: TelegramUserSchema
     response: requests.Response
     try:
         telegram_user = to_telegram_user(from_user_data)
+        
+        logger.debug(
+            'Successfully mapping user data to TelegramUserSchema and trying to send request to Django server REST API endpoint',
+            telegram_user=telegram_user.dict(),
+            endpoint=url
+        )
 
         response = requests.post(
-            url=f'{Settings.SERVER_HOST}{Settings.API_BASE_PATH}{Settings.API_VERSION}{Settings.API_URL_TAKE_TOKEN}',
+            url=url,
             data=telegram_user.dict(),
         )
     except ValidationError as validation_error:
