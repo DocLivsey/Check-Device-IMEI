@@ -50,7 +50,9 @@ def authenticate(users_tokens: dict, user_id: int):
         if response.status_code != 200:
             logger.error(
                 'Failed to get token', 
-                response=response
+                status_code=response.status_code,
+                reason=response.reason,
+                response=response.text,
             )
             
             raise Exception('Not Authenticated')
