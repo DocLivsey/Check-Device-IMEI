@@ -1,0 +1,70 @@
+x-web-variables: &web-variables
+  DEBUG: dev
+  ALLOWED_HOSTS: http://localhost
+  HOST: http://localhost:8000/
+  DATABASE_HOST: db
+  POSTGRES_DB: imei_db
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: strongpassword
+x-api-variables: &api-variables
+  SERVER_HOST: web
+  API_BASE_PATH: /api
+  API_VERSION: /v1
+  API_AUTH_URL: /auth
+  API_URL_TAKE_TOKEN: /api-token-telegram-auth/
+x-bot-variables: &bot-variables
+  TELEGRAM_BOT_TOKEN_KEY: 7546803808:AAEdPITUtJQrwTGwRFvQRHTwmoD7BDn-LpY
+  API_HOST: api
+  API_BASE_PATH: /api
+  API_VERSION: /v1
+  API_AUTH_URL: /auth
+  API_URL_TAKE_TOKEN: /api-token-telegram-auth/
+services:
+  db:
+    image: "postgres:15-alpine"
+    restart: unless-stopped
+    volumes:
+      - ./.postgresql:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: imei_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: strongpassword
+      TZ: 'GMT+3'
+      PGTZ: 'GMT+3'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d imei_db -U admin" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+  web:
+    container_name: web-service
+    build:
+      context: DjangoServer
+      dockerfile: .docker/Dockerfile
+    environment: *web-variables
+    ports:
+      - 8000:8080
+    depends_on:
+      - db
+  api:
+    container_name: api-service
+    build:
+      context: API
+      dockerfile: Dockerfile
+    environment: *api-variables
+    ports:
+      - 8080:8080
+    depends_on:
+      - web
+  bot:
+    container_name: imei-bot-service
+    build:
+      context: IMEI-Telegram-Bot
+      dockerfile: Dockerfile
+    environment: *bot-variables
+    ports:
+      - 9000:8080
+    depends_on:
+      - api
