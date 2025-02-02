@@ -1,5 +1,6 @@
 x-api-variables: &api-variables
   SERVER_HOST: ''
+  SERVER_PORT: ''
   API_BASE_PATH: ''
   API_VERSION: ''
   API_AUTH_URL: ''

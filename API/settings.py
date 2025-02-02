@@ -7,7 +7,8 @@ logger = structlog.get_logger(__name__)
 
 
 class Settings(Enum):
-    SERVER_HOST = environ.get('SERVER_HOST', 'http://192.168.0.107:8000')
+    SERVER_HOST = environ.get('SERVER_HOST', 'http://192.168.0.107')
+    SERVER_PORT = environ.get('SERVER_PORT', 8000)
     API_BASE_PATH = environ.get('API_BASE_PATH', '/api')
     API_VERSION = environ.get('API_VERSION', '/v1')
     API_AUTH_URL = environ.get('API_AUTH_URL', '/auth')
@@ -24,6 +25,7 @@ logger.info(
 )
 
 server_host = Settings.SERVER_HOST.value
+server_port = Settings.SERVER_PORT.value
 api_base_path = Settings.API_BASE_PATH.value
 api_version = Settings.API_VERSION.value
 api_auth_url = Settings.API_AUTH_URL.value

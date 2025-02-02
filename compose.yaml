@@ -8,6 +8,7 @@ x-web-variables: &web-variables
   POSTGRES_PASSWORD: strongpassword
 x-api-variables: &api-variables
   SERVER_HOST: web
+  SERVER_PORT: 8000
   API_BASE_PATH: /api
   API_VERSION: /v1
   API_AUTH_URL: /auth
@@ -15,6 +16,7 @@ x-api-variables: &api-variables
 x-bot-variables: &bot-variables
   TELEGRAM_BOT_TOKEN_KEY: 7546803808:AAEdPITUtJQrwTGwRFvQRHTwmoD7BDn-LpY
   API_HOST: api
+  API_PORT: 8080
   API_BASE_PATH: /api
   API_VERSION: /v1
   API_AUTH_URL: /auth
