@@ -18,7 +18,7 @@ async def telegram_token_auth(from_user_data: dict):
         data_from_user=from_user_data,
     )
     
-    url = f'{server_host}{api_base_path}{api_version}{api_url_take_token}'
+    url = f'{server_host}{api_base_path}{api_version}{api_url_take_token}/'
     telegram_user: TelegramUserSchema
     response: requests.Response
     try:
