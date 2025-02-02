@@ -76,6 +76,7 @@ def authenticate(users_tokens: dict, user_id: int):
 def request_auth_token(user_id: int) -> str:
     url = f'{Settings.API_HOST}{Settings.API_BASE_PATH}{Settings.API_VERSION}{Settings.API_URL_TAKE_TOKEN}'
     
+    response: requests.Response
     try:
         logger.info(
             'sending request to API to get token',
