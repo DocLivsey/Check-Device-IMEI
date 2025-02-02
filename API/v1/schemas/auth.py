@@ -33,5 +33,5 @@ def to_token(token_data: dict) -> TokenSchema:
 
     return TokenSchema(
         token=token,
-        user=user,
+        user=to_telegram_user(user),
     )
