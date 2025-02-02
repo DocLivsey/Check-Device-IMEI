@@ -16,8 +16,9 @@ async def start_handler(
         users_tokens: dict
 ):
     await auth_required(users_tokens, message.from_user, message)
-        
-    await message.answer(f'hello, {message.from_user}')
+
+    if users_tokens[message.from_user.id]:    
+        await message.answer(f'hello, {message.from_user}')
 
 
 @bot_logger
