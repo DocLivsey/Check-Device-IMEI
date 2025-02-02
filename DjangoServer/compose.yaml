@@ -1,7 +1,7 @@
 x-web-variables: &web-variables
   DEBUG: dev
   ALLOWED_HOSTS: http://localhost
-  HOST: http://localhost:8000/'
+  HOST: http://localhost:8000/
   DATABASE_HOST: db
   POSTGRES_DB: imei_db
   POSTGRES_USER: admin
