@@ -22,3 +22,12 @@ logger.info(
     'read environment variables',
     settings=Settings.to_string()
 )
+
+server_host = Settings.SERVER_HOST.value
+api_base_path = Settings.API_BASE_PATH.value
+api_version = Settings.API_VERSION.value
+api_auth_url = Settings.API_AUTH_URL.value
+api_url_take_token = Settings.API_URL_TAKE_TOKEN.value
+
+if 'http' not in server_host:
+    server_host = 'http://' + server_host
