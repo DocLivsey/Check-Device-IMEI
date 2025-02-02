@@ -21,8 +21,9 @@ from Auth.views import TelegramAuthView
 from CheckIMEI.views import HelloView
 from rest_framework.authtoken.views import obtain_auth_token
 
-api_base_path = 'api/v1/'
+from DjangoServer import settings
 
+api_base_path = f'{settings.REST_API_BASE}{settings.REST_API_VERSION}'
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(f'{api_base_path}api-token-auth/', obtain_auth_token, name='api_token_auth'),
