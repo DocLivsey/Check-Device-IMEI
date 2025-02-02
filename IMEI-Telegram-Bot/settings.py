@@ -33,5 +33,5 @@ api_version = Settings.API_VERSION.value
 api_auth_url = Settings.API_AUTH_URL.value
 api_url_take_token = Settings.API_URL_TAKE_TOKEN.value
 
-if 'https' not in api_host:
-    api_host = 'https://' + api_host
+if 'http' not in api_host:
+    api_host = 'http://' + api_host
