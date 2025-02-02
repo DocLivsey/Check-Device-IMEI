@@ -74,9 +74,27 @@ def authenticate(users_tokens: dict, user_id: int):
 
 
 def request_auth_token(user_id: int) -> str:
-    response = requests.post(
-            url=f'{Settings.API_HOST}{Settings.API_BASE_PATH}{Settings.API_VERSION}{Settings.API_URL_TAKE_TOKEN}',
+    url = f'{Settings.API_HOST}{Settings.API_BASE_PATH}{Settings.API_VERSION}{Settings.API_URL_TAKE_TOKEN}'
+    
+    try:
+        logger.info(
+            'sending request to API to get token',
+            api_url=url,
+            user=user_id,
         )
+        
+        response = requests.post(
+                url=url,
+            )
+        
+    except requests.RequestException as http_error:
+        logger.error(
+            'Failed to send request',
+            status_code=http_error.status_code,
+            reason=http_error.reason,
+        )
+        
+        raise Exception('Not Authenticated')
         
     if response.status_code != 200:
         logger.error(
