@@ -8,7 +8,6 @@ logger = structlog.get_logger(__name__)
 
 class Settings(Enum):
     TELEGRAM_BOT_TOKEN_KEY = environ.get('TELEGRAM_BOT_TOKEN_KEY', None)
-    API_TOKEN = environ.get('API_TOKEN', None)
     API_HOST = environ.get('API_URL', 'http://192.168.0.107:8080')
     API_BASE_PATH = environ.get('API_BASE_PATH', '/api')
     API_VERSION = environ.get('API_VERSION', '/v1')
