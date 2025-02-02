@@ -19,6 +19,18 @@ def to_telegram_user(telegram_user_data: dict) -> TelegramUserSchema:
     first_name = telegram_user_data.get('first_name') if 'first_name' in telegram_user_data else 'Undefined'
     last_name = telegram_user_data.get('last_name') if 'last_name' in telegram_user_data else 'Undefined'
 
+    if not telegram_id:
+        telegram_id = -1
+
+    if not username:
+        username = 'Undefined'
+
+    if not first_name:
+        first_name = 'Undefined'
+
+    if not last_name:
+        last_name = 'Undefined'
+
     return TelegramUserSchema(
         telegram_id=telegram_id,
         username=username,
@@ -30,6 +42,12 @@ def to_telegram_user(telegram_user_data: dict) -> TelegramUserSchema:
 def to_token(token_data: dict) -> TokenSchema:
     token = token_data.get('token') if 'token' in token_data else 'Undefined'
     user = token_data.get('user') if 'user' in token_data else {}
+
+    if not token:
+        token = 'Undefined'
+
+    if not user:
+        user = {}
 
     return TokenSchema(
         token=token,
