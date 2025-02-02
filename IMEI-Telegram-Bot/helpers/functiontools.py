@@ -86,7 +86,7 @@ def request_auth_token(user_id: int) -> str:
         
         response = requests.post(
                 url=url,
-            )
+        )
         
     except requests.RequestException as http_error:
         logger.error(
