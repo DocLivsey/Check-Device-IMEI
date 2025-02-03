@@ -26,3 +26,7 @@ async def passed_auth_then_do(
 
 async def start_handler_logic(message: Message):
     await message.answer(f'hello, {message.from_user}')
+
+
+async def help_handler_logic(message: Message):
+    await message.answer('hello')
