@@ -29,11 +29,10 @@ async def passed_auth_then_do(
 
 async def start_handler_logic(
         message: Message,
-        users_tokens: dict,
-        user_id: int
+        user_id: int,
+        token: str,
 ):
     url = f'{api_host}{api_base_path}{api_version}/hello/'
-    token = users_tokens[user_id]
 
     logger.info(
         'starting work of `start_handler` logic'
