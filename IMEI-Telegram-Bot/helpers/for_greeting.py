@@ -4,6 +4,7 @@ import requests
 import structlog
 from aiogram.types import Message
 
+from schemas.auth import UserStatus
 from settings import api_host, api_base_path, api_version
 
 logger = structlog.get_logger(__name__)
@@ -11,7 +12,7 @@ logger = structlog.get_logger(__name__)
 
 async def start_handler_logic(
         message: Message,
-        token: str,
+        token: str | UserStatus,
 ):
     url = f'{api_host}{api_base_path}{api_version}/check-imei/hello/'
 
@@ -21,6 +22,16 @@ async def start_handler_logic(
         token=token,
         url=url,
     )
+    
+    if token == UserStatus.BLOCKED:
+        logger.error(
+            'User was blocked'
+        )
+        
+        message_text = 'You are not allowed to perform this action because you was been blocked'
+        
+        await message.answer(message_text)
+        return
 
     response: requests.Response
     try:
