@@ -102,12 +102,12 @@ def request_auth_token(user: User) -> TokenSchema:
             'sending request to API to get token with data',
             api_url=url,
             user=user_id,
-            data=from_telegram_user(telegram_user)
+            data=telegram_user.dict()
         )
         
         response = requests.post(
             url=url,
-            data=from_telegram_user(telegram_user)
+            data=telegram_user,
         )
         
     except requests.RequestException as http_error:
