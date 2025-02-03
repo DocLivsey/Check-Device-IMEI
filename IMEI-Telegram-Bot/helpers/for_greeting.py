@@ -29,7 +29,6 @@ async def passed_auth_then_do(
 
 async def start_handler_logic(
         message: Message,
-        user_id: int,
         token: str,
 ):
     url = f'{api_host}{api_base_path}{api_version}/hello/'

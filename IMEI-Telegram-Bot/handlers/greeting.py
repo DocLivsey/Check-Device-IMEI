@@ -23,7 +23,6 @@ async def start_handler(
         message.from_user.id,
         start_handler_logic,
         message=message,
-        user_id=message.from_user.id,
         token=users_tokens[message.from_user.id],
     )
 
