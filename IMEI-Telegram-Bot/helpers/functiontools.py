@@ -1,5 +1,7 @@
 import requests
 import structlog
+from collections.abc import Callable
+
 from aiogram.types import Message, User
 from pydantic import ValidationError
 

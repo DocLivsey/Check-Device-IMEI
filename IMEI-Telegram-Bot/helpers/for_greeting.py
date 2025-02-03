@@ -1,5 +1,3 @@
-from collections.abc import Callable
-
 import requests
 import structlog
 from aiogram.types import Message
