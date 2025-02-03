@@ -5,7 +5,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from settings import telegram_bot_token
 from helpers.decorators import bot_logger
 from handlers.greeting import router as greeting_router
-from handlers.verification import router as verification_router
+from handlers.inspection import router as verification_router
 
 logger = structlog.get_logger(__name__)
 
