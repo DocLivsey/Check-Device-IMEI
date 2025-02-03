@@ -29,7 +29,7 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
 
         response = requests.post(
             url=url,
-            data=from_user_data,
+            data=from_user_data.dict(),
         )
     except ValidationError as validation_error:
         logger.error(
