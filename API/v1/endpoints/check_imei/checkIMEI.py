@@ -48,24 +48,27 @@ async def hello(request: Request):
     url = f'{server_host}{api_base_path}{api_version}/hello/'
     response: requests.Response
     try:
+        headers: dict = {
+            'Authorization': request.headers['authorization']
+        }
+        
         logger.info(
             'Trying to send request to Django server REST API endpoint',
-            headers=request.headers,
+            headers=headers,
             body=await request.body(),
             endpoint=url,
         )
 
         response = requests.get(
             url=url,
-            headers=request.headers,
+            headers=headers,
         )
     except HTTPException as http_exception:
         logger.error(
             'HTTP error occurred',
             http_error=str(http_exception),
             endpoint=url,
-            body=await request.body(),
-            headers=request.headers,
+            headers=headers,
         )
 
         raise HTTPException(status_code=http_exception.status_code, detail=str(http_exception))
@@ -75,8 +78,7 @@ async def hello(request: Request):
             'Exception occurred',
             exc_info=exception,
             endpoint=url,
-            body=await request.body(),
-            headers=request.headers,
+            headers=headers,
         )
 
         raise HTTPException(status_code=400, detail=str(exception))
