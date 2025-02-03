@@ -107,7 +107,7 @@ def request_auth_token(user: User) -> TokenSchema:
         
         response = requests.post(
             url=url,
-            data=telegram_user,
+            json=telegram_user.dict(),
         )
         
     except requests.RequestException as http_error:
