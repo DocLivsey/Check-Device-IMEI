@@ -1,7 +1,10 @@
 from collections.abc import Callable
 
+import requests
 import structlog
 from aiogram.types import Message
+
+from settings import api_host, api_base_path, api_version
 
 logger = structlog.get_logger(__name__)
 
@@ -24,7 +27,38 @@ async def passed_auth_then_do(
         return
 
 
-async def start_handler_logic(message: Message):
+async def start_handler_logic(
+        message: Message,
+        users_tokens: dict,
+        user_id: int
+):
+    url = f'{api_host}{api_base_path}{api_version}/hello/'
+    token = users_tokens[user_id]
+
+    logger.info(
+        'starting work of `start_handler` logic'
+        'Trying to send request to API to get welcome message',
+        token=token,
+        user=user_id,
+        url=url,
+    )
+
+    response: requests.Response
+    message_text = 'Hello!'
+    try:
+        response = requests.get(
+            url=url,
+            headers={
+                'Authorization': f'Token {token}'
+            }
+        )
+    except requests.RequestException as request_exception:
+        logger.error(
+            'Failed to get welcome message from API',
+            token=token,
+            exception=str(request_exception),
+        )
+
     await message.answer(f'hello, {message.from_user}')
 
 
