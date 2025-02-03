@@ -18,7 +18,7 @@ async def hello(request: Request):
         request_body=request.json(),
     )
 
-    if 'Authorization' not in request.headers.keys():
+    if 'Authorization' or 'authorization' not in request.headers.keys():
         raise HTTPException(status_code=401, detail='Authorization header missing')
 
     if not request.headers['Authorization'].startswith('Token '):
