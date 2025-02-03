@@ -18,7 +18,7 @@ async def hello(request: Request):
         request_body=await request.body(),
     )
 
-    if 'Authorization' or 'authorization' not in request.headers.keys():
+    if 'authorization' not in request.headers.keys():
         logger.error(
             'Authorization header missing',
             request_headers=request.headers,
@@ -57,7 +57,6 @@ async def hello(request: Request):
 
         response = requests.get(
             url=url,
-            body=await request.body(),
             headers=request.headers,
         )
     except HTTPException as http_exception:
@@ -70,6 +69,7 @@ async def hello(request: Request):
         )
 
         raise HTTPException(status_code=http_exception.status_code, detail=str(http_exception))
+    
     except Exception as exception:
         logger.error(
             'Exception occurred',
