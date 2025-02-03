@@ -51,12 +51,11 @@ async def hello(request: Request):
         raise HTTPException(status_code=401, detail='Authorization token missing')
 
     url = f'{server_host}{api_base_path}{api_version}/hello/'
+    headers: dict = {
+        'Authorization': request.headers['authorization']
+    }
     response: requests.Response
     try:
-        headers: dict = {
-            'Authorization': request.headers['authorization']
-        }
-        
         logger.info(
             'Trying to send request to Django server REST API endpoint',
             headers=headers,
