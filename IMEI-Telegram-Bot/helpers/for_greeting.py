@@ -18,7 +18,7 @@ async def passed_auth_then_do(
         **kwargs
 ):
     if is_authenticated(users_tokens, user_id):
-        await handler(users_tokens, *args, **kwargs)
+        await handler(*args, **kwargs)
 
     else:
         return
