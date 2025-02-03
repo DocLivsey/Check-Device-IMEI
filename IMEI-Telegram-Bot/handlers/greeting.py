@@ -3,6 +3,7 @@ from aiogram import Router, types
 from aiogram.filters import Command
 
 from helpers.decorators import bot_logger
+from helpers.for_greeting import passed_auth_then_do, start_handler_logic
 from helpers.functiontools import auth_required
 
 logger = structlog.get_logger(__name__)
@@ -17,8 +18,13 @@ async def start_handler(
 ):
     await auth_required(users_tokens, message.from_user, message)
 
-    if users_tokens[message.from_user.id]:    
-        await message.answer(f'hello, {message.from_user}')
+    await passed_auth_then_do(
+        users_tokens,
+        message.from_user.id,
+        start_handler_logic,
+        message=message,
+    )
+
 
 
 @bot_logger
