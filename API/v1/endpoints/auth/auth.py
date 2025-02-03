@@ -12,27 +12,24 @@ auth_router = APIRouter()
 
 
 @auth_router.post(f'{api_url_take_token}', response_model=TokenSchema)
-async def telegram_token_auth(from_user_data: dict):
+async def telegram_token_auth(from_user_data: TelegramUserSchema):
     logger.info(
         'Handle POST request to API for Telegram token authentication with',
         data_from_user=from_user_data,
     )
     
     url = f'{server_host}{api_base_path}{api_version}{api_url_take_token}'
-    telegram_user: TelegramUserSchema
     response: requests.Response
     try:
-        telegram_user = to_telegram_user(from_user_data)
-        
         logger.debug(
             'Successfully mapping user data to TelegramUserSchema and trying to send request to Django server REST API endpoint',
-            telegram_user=telegram_user.dict(),
+            telegram_user=from_user_data.dict(),
             endpoint=url
         )
 
         response = requests.post(
             url=url,
-            data=telegram_user,
+            data=from_user_data,
         )
     except ValidationError as validation_error:
         logger.error(
