@@ -37,7 +37,6 @@ async def start_handler_logic(
         'starting work of `start_handler` logic'
         'Trying to send request to API to get welcome message',
         token=token,
-        user=user_id,
         url=url,
     )
 
