@@ -59,4 +59,31 @@ class IMEICheckView(APIView):
             )
 
     def post(self, request):
-        pass
+        imei_check: IMEICheck
+        imei_check_response: IMEICheckResponse
+        try:
+            imei_check_response = IMEICheckResponse.from_data(request.data)
+
+            imei_check = IMEICheck.objects.create(
+                id=imei_check_response.id,
+                type=imei_check_response.type,
+                status=imei_check_response.status,
+                order_id=imei_check_response.order_id,
+                service=imei_check_response.service,
+                amount=imei_check_response.amount,
+                processed_at=imei_check_response.processed_at,
+                properties=imei_check_response.properties,
+            )
+            imei_check.save()
+
+            imei_check_response = IMEICheckResponse.to_imei_check_response(imei_check)
+        except Exception as exception:
+            return Response(
+                {'message': str(exception)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            {'IMEICheckResponse': imei_check_response},
+            status=status.HTTP_201_CREATED
+        )
