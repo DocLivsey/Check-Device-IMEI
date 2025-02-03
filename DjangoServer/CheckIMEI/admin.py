@@ -3,14 +3,10 @@ from django.forms import ModelForm
 from django.contrib import admin
 
 
-def block_user(user: User):
-    user.is_active = False
-    user.save()
-    
-
 def block_users(modeladmin, request, queryset):
     for user in queryset:
-        block_user(user)
+        user.is_active = False
+        user.save()
         
 
 block_users.short_description = "Block selected users"
