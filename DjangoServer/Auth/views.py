@@ -36,6 +36,14 @@ class TelegramAuthView(APIView):
             user = profile.user
         else:
             user = profile.user
+            
+        if not user.is_active:
+            return Response(
+                {
+                    "message": "User is not active"
+                }, 
+                status=status.HTTP_403_FORBIDDEN
+            )
 
         token, _ = Token.objects.get_or_create(user=user)
 
@@ -43,5 +51,6 @@ class TelegramAuthView(APIView):
             {
                 'token': token.key,
                 'telegram_id': telegram_id,
-            }
+            },
+            status=status.HTTP_200_OK,
         )
