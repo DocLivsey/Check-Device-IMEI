@@ -1,6 +1,6 @@
 x-web-variables: &web-variables
   DEBUG: dev
-  ALLOWED_HOSTS: http://localhost, web
+  ALLOWED_HOSTS: web
   HOST: http://localhost:8000/
   DATABASE_HOST: db
   POSTGRES_DB: imei_db
@@ -8,7 +8,7 @@ x-web-variables: &web-variables
   POSTGRES_PASSWORD: strongpassword
 x-api-variables: &api-variables
   SERVER_HOST: web
-  SERVER_PORT: 8000
+  SERVER_PORT: 8080
   API_BASE_PATH: /api
   API_VERSION: /v1
   API_AUTH_URL: /auth
