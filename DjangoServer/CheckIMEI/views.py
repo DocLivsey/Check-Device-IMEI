@@ -183,9 +183,24 @@ class IMEICheckView(APIView):
             imei = request.data['imei']
 
             device_data = IMEICheck.objects.filter(device_id=imei)
+            imei_check_response = IMEICheckResponse.to_imei_check_response(device_data)
+
+            return Response(
+                {'IMEICheckResponse': imei_check_response},
+                status=status.HTTP_200_OK
+            )
 
         except KeyError:
-            return Response({'message': 'No IMEI or wrong IMEI entry'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'message': 'No IMEI or wrong IMEI entry'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except Exception as exception:
+            return Response(
+                {'message': str(exception)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     def post(self, request):
         pass
