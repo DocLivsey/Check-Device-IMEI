@@ -3,8 +3,8 @@ from aiogram import Router, types
 from aiogram.filters import Command
 
 from helpers.decorators import bot_logger
-from helpers.for_greeting import passed_auth_then_do, start_handler_logic, help_handler_logic
-from helpers.functiontools import auth_required
+from helpers.for_greeting import start_handler_logic, help_handler_logic
+from helpers.functiontools import auth_required, passed_auth_then_do
 
 logger = structlog.get_logger(__name__)
 router = Router()
