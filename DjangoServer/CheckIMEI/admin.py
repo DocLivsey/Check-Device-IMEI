@@ -1,6 +1,6 @@
+from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.contrib import admin
-from django.contrib.auth.users import User
 
 
 def block_user(user: User):
