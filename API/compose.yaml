@@ -1,4 +1,5 @@
 x-api-variables: &api-variables
+  IMEI-CHECK-API-TOKEN: sy5woSxuac7xKalljXFjgbB2hCRw7GQLueRtGp1974d8fe72
   SERVER_HOST: ''
   SERVER_PORT: ''
   API_BASE_PATH: ''
