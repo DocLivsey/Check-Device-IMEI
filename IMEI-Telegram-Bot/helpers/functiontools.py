@@ -3,10 +3,35 @@ import structlog
 from aiogram.types import Message, User
 from pydantic import ValidationError
 
-from schemas.auth import TelegramUserSchema, to_telegram_user, TokenSchema, to_token, from_telegram_user
+from schemas.auth import (
+    TelegramUserSchema, 
+    to_telegram_user, 
+    TokenSchema, 
+    to_token, 
+    from_telegram_user,
+    UserStatus,
+)
 from settings import api_host, api_base_path, api_version, api_auth_url, api_url_take_token
 
 logger = structlog.get_logger(__name__)
+
+
+def is_authenticated(users_tokens: dict, user_id: int) -> bool:
+    return user_id in users_tokens and users_tokens[user_id] is not None and users_tokens[user_id] != UserStatus.BLOCKED
+
+
+async def passed_auth_then_do(
+        users_tokens: dict,
+        user_id: int,
+        handler: Callable,
+        *args,
+        **kwargs
+):
+    if is_authenticated(users_tokens, user_id):
+        await handler(*args, **kwargs)
+
+    else:
+        return
 
 
 async def auth_required(users_tokens: dict, user: User, message: Message):
@@ -50,7 +75,7 @@ def authenticate(users_tokens: dict, user: User):
             user=user_id,
         )
         
-        users_tokens[user_id] = request_auth_token(user).token
+        users_tokens[user_id] = request_auth_token(user)
         
         logger.info(
             'User authenticated successfully',
@@ -79,7 +104,7 @@ def authenticate(users_tokens: dict, user: User):
     return
 
 
-def request_auth_token(user: User) -> TokenSchema:
+def request_auth_token(user: User):
     url = f'{api_host}{api_base_path}{api_version}{api_auth_url}{api_url_take_token}'
     user_id = user.id
     username = user.username
@@ -131,6 +156,15 @@ def request_auth_token(user: User) -> TokenSchema:
         )
 
         raise Exception('Not Authenticated')
+    
+    if response.status_code == 403:
+        logger.error(
+            'User was blocked',
+            reason=response.reason,
+            response=response.text,
+        )
+        
+        return UserStatus.BLOCKED
         
     if response.status_code != 200:
         logger.error(
@@ -162,4 +196,4 @@ def request_auth_token(user: User) -> TokenSchema:
 
         raise Exception('Not Authenticated')
         
-    return users_token
+    return users_token.token
