@@ -89,4 +89,4 @@ async def hello(request: Request):
         endpoint=url,
     )
 
-    return to_message(response.json())
+    return to_message(response.json().get('message'))
