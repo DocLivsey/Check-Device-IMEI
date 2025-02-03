@@ -40,4 +40,6 @@ async def help_handler(
         message.from_user.id,
         help_handler_logic,
         message=message,
+        users_tokens=users_tokens,
+        user_id=message.from_user.id,
     )
