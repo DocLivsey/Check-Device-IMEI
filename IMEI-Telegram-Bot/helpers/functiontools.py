@@ -102,7 +102,7 @@ def request_auth_token(user: User) -> TokenSchema:
             'sending request to API to get token with data',
             api_url=url,
             user=user_id,
-            data=telegram_user.dict()
+            request_body=telegram_user.dict()
         )
         
         response = requests.post(
