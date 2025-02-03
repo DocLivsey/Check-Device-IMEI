@@ -69,6 +69,20 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             'detail': str(exception)
         }
     
+    if response.status_code == 403:
+        logger.error(
+            'User is blocked',
+            status_code=response.status_code,
+            reason=response.reason,
+            response=response.text,
+        )
+        
+        return {
+            'status_code' : response.status_code,
+            'detail': response.reason,
+            'message': 'User is blocked'
+        }
+    
     if response.status_code != 200:
         logger.error(
             'Failed to get token', 
