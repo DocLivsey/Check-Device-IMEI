@@ -11,6 +11,9 @@ def block_user(user: User):
 def block_users(modeladmin, request, queryset):
     for user in queryset:
         block_user(user)
+        
+
+block_users.short_description = "Block selected users"
 
 
 @admin.register(User)
