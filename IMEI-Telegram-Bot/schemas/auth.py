@@ -1,4 +1,10 @@
 from pydantic import BaseModel
+from enum import Enum
+
+
+class UserStatus(Enum):
+    ACTIVE = 'active'
+    BLOCKED = 'blocked'
 
 
 class TelegramUserSchema(BaseModel):
