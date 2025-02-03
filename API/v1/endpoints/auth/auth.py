@@ -22,7 +22,8 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
     response: requests.Response
     try:
         logger.debug(
-            'Successfully mapping user data to TelegramUserSchema and trying to send request to Django server REST API endpoint',
+            'Successfully mapping user data to TelegramUserSchema and '
+            'trying to send request to Django server REST API endpoint',
             telegram_user=from_user_data.dict(),
             endpoint=url
         )
