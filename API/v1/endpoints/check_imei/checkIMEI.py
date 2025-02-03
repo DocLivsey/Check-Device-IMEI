@@ -13,18 +13,36 @@ check_imei_router = APIRouter()
 @check_imei_router.get('/hello/', response_model=HelloScheme)
 async def hello(request: Request):
     logger.info(
-        'Handle POST request to API for Telegram token authentication with',
+        'Handle POST request to API to send Welcome message to user',
         request_headers=request.headers,
-        request_body=request.json(),
+        request_body=await request.body(),
     )
 
     if 'Authorization' or 'authorization' not in request.headers.keys():
+        logger.error(
+            'Authorization header missing',
+            request_headers=request.headers,
+            request_body=await request.body(),
+        )
+        
         raise HTTPException(status_code=401, detail='Authorization header missing')
 
     if not request.headers['Authorization'].startswith('Token '):
+        logger.error(
+            'Authorization header invalid',
+            request_headers=request.headers,
+            request_body=await request.body(),
+        )
+        
         raise HTTPException(status_code=401, detail='Authorization header invalid')
 
     if not request.headers['Authorization']:
+        logger.error(
+            'Authorization token missing',
+            request_headers=request.headers,
+            request_body=await request.body(),
+        )
+        
         raise HTTPException(status_code=401, detail='Authorization token missing')
 
     url = f'{server_host}{api_base_path}{api_version}/hello/'
@@ -33,11 +51,13 @@ async def hello(request: Request):
         logger.info(
             'Trying to send request to Django server REST API endpoint',
             headers=request.headers,
+            body=await request.body(),
             endpoint=url,
         )
 
         response = requests.get(
             url=url,
+            body=await request.body(),
             headers=request.headers,
         )
     except HTTPException as http_exception:
@@ -45,6 +65,7 @@ async def hello(request: Request):
             'HTTP error occurred',
             http_error=str(http_exception),
             endpoint=url,
+            body=await request.body(),
             headers=request.headers,
         )
 
@@ -54,6 +75,7 @@ async def hello(request: Request):
             'Exception occurred',
             exc_info=exception,
             endpoint=url,
+            body=await request.body(),
             headers=request.headers,
         )
 
