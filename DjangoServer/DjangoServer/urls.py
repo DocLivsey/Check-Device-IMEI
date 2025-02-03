@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from Auth.views import TelegramAuthView
-from CheckIMEI.views import HelloView
+from CheckIMEI.views import HelloView, IMEICheckView
 from rest_framework.authtoken.views import obtain_auth_token
 
 from DjangoServer import settings
@@ -29,4 +29,5 @@ urlpatterns = [
     path(f'{api_base_path}api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path(f'{api_base_path}api-token-telegram-auth/', TelegramAuthView.as_view(), name='api_token_telegram_auth'),
     path(f'{api_base_path}hello/', HelloView.as_view(), name='hello'),
+    path(f'{api_base_path}check-imei/', IMEICheckView.as_view(), name='check_imei'),
 ]
