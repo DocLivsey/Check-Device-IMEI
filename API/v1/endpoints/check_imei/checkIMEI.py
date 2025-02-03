@@ -10,6 +10,11 @@ from settings import server_host, api_base_path, api_version
 check_imei_router = APIRouter()
 
 
+@check_imei_router.get('/', response_model=HelloScheme)
+async def check_imei(request: Request):
+    pass
+
+
 @check_imei_router.get('/hello/', response_model=HelloScheme)
 async def hello(request: Request):
     logger.info(
