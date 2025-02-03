@@ -41,7 +41,7 @@ class Property(models.Model):
     network = models.CharField(max_length=100)
 
 
-class CheckIMEI(models.Model):
+class IMEICheck(models.Model):
     TYPE_CHOICES = (
         (CheckTypes.WEB, 'web'),
         (CheckTypes.API, 'api'),
