@@ -31,7 +31,7 @@ async def start_handler_logic(
         message: Message,
         token: str,
 ):
-    url = f'{api_host}{api_base_path}{api_version}/hello/'
+    url = f'{api_host}{api_base_path}{api_version}/check-imei/hello/'
 
     logger.info(
         'starting work of `start_handler` logic'
@@ -41,7 +41,6 @@ async def start_handler_logic(
     )
 
     response: requests.Response
-    message_text = 'Hello!'
     try:
         response = requests.get(
             url=url,
@@ -55,8 +54,37 @@ async def start_handler_logic(
             token=token,
             exception=str(request_exception),
         )
+        
+    if response.status_code == 401:
+        logger.error(
+            'Authentication failed',
+            token=token,
+        )
+        
+        message_text = 'You are not authorized to perform this action'
+        
+        await message.answer(message_text)
+        return
+    
+    if response.status_code == 403:
+        return
+        
+    if 'message' not in response.json():
+        logger.error(
+            'No message received from API',
+            token=token,
+        )
+        
+        message_text = 'Who are you?'
+        
+        await message.answer(message_text)
+        return
+        
 
-    await message.answer(f'hello, {message.from_user}')
+    message_text = response.json().get('message')
+
+    await message.answer(message_text)
+    return
 
 
 async def help_handler_logic(message: Message):
