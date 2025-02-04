@@ -6,7 +6,7 @@ from v1.functiontools import handle_401_response
 
 logger = structlog.get_logger(__name__)
 
-from v1.schemas.checkIMEI import IMEICheckScheme
+from v1.schemas.checkIMEI import IMEICheckScheme, to_imei_check
 from settings import server_host, api_base_path, api_version
 
 check_imei_router = APIRouter()
@@ -53,7 +53,6 @@ async def check_imei(request: Request):
             headers=headers,
             json=body,
         )
-
     except HTTPException as http_exception:
         logger.error(
             'HTTP error occurred',
@@ -79,3 +78,19 @@ async def check_imei(request: Request):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(exception),
         )
+
+    if response.status_code != status.HTTP_200_OK:
+        logger.error(
+            'Failed to get data about device by IMEI',
+            status_code=response.status_code,
+            reason=response.reason,
+            response=response.text,
+            imei=imei,
+        )
+
+        raise HTTPException(
+            status_code=response.status_code,
+            detail=response.json()
+        )
+
+    return to_imei_check(response.json())
