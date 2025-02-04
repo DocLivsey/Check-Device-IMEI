@@ -1,9 +1,11 @@
 import requests
 import structlog
 from aiogram.types import Message
+from pydantic import ValidationError
 
 from helpers.functiontools import handle_401, handle_403
 from schemas.auth import UserStatus
+from schemas.inspection import IMEICheckScheme, to_imei_check
 from settings import api_host, api_base_path, api_version
 
 logger = structlog.get_logger(__name__)
@@ -53,15 +55,19 @@ async def check_imei_handler_logic(
         return
 
     response: requests.Response
+    imei_response: IMEICheckScheme
     try:
         response = requests.get(
             url=url,
             headers={'Authorization': f'Token {token}'},
             json={'imei': imei}
         )
+
+        response_data = response.json()
+        imei_response = to_imei_check(response_data)
     except requests.RequestException as request_exception:
         logger.error(
-            f'Failed to check device imei from API',
+            'Failed to check device imei from API',
             token=token,
             exception=str(request_exception),
         )
@@ -76,6 +82,39 @@ async def check_imei_handler_logic(
         await message.answer(message_text)
         return
 
+    except ValidationError or TypeError as validation_error:
+        logger.error(
+            'Failed to mapping from request data to IMEI response scheme',
+            user=user_id,
+            imei=imei,
+            response=str(validation_error),
+        )
+
+        message_text = 'Something went wrong. Please try again later or try another IMEI.'
+
+        await message.answer(message_text)
+        return
+
+    except Exception as error:
+        logger.error(
+            'Something went wrong',
+            user=user_id,
+            imei=imei,
+            error=str(error),
+        )
+
+        message_text = 'Something went wrong. Please try again later or try another IMEI.'
+
+        await message.answer(message_text)
+        return
+
+    message_text = (
+        f'''
+        imei: {imei_response.device_id}
+        '''
+    )
+
+    await message.answer(message_text)
     return
 
 
