@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import Response
 from pydantic import ValidationError
+from typing import Union
 import structlog
 import requests
 
@@ -11,7 +13,7 @@ from v1.schemas.auth import TokenSchema, TelegramUserSchema, to_telegram_user, t
 auth_router = APIRouter()
 
 
-@auth_router.post(f'{api_url_take_token}', response_model=TokenSchema)
+@auth_router.post(f'{api_url_take_token}', response_model=Union[TokenSchema, Response])
 async def telegram_token_auth(from_user_data: TelegramUserSchema):
     logger.info(
         'Handle POST request to API for Telegram token authentication with',
@@ -40,11 +42,10 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             data_from_user=from_user_data,
         )
 
-        response = requests.Response()
-        response.status_code = 404
-        response.reason = str(validation_error)
-        
-        return response
+        return Response(
+            status_code=404,
+            content=validation_error.json(),
+        )
 
     except HTTPException as http_exception:
         logger.error(
@@ -54,11 +55,10 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             data_from_user=from_user_data,
         )
 
-        response = requests.Response()
-        response.status_code = http_exception.status_code
-        response.reason = http_exception.detail
-
-        return response
+        return Response(
+            status_code=http_exception.status_code,
+            content=http_exception.detail,
+        )
 
     except Exception as exception:
         logger.error(
@@ -68,11 +68,10 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             data_from_user=from_user_data,
         )
 
-        response = requests.Response()
-        response.status_code = 400
-        response.reason = str(exception)
-
-        return response
+        return Response(
+            status_code=400,
+            content=str(exception),
+        )
     
     if response.status_code == 403:
         logger.error(
@@ -82,7 +81,10 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             response=response.text,
         )
 
-        return response
+        return Response(
+            status_code=response.status_code,
+            content=response.json(),
+        )
     
     if response.status_code != 200:
         logger.error(
@@ -92,7 +94,10 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             response=response.text,
         )
 
-        return response
+        return Response(
+            status_code=response.status_code,
+            content=response.json(),
+        )
         
     if 'token' and 'telegram_id' not in response.json():
         logger.error(
@@ -100,8 +105,10 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             response=response.json(),
         )
 
-        response.status_code = 400
-        response.reason = 'Invalid response from server'
+        return Response(
+            status_code=400,
+            content={'message': 'Invalid response from server'},
+        )
         
     logger.info(
         'Successfully retrieved token from Django server REST API',
