@@ -7,6 +7,7 @@ logger = structlog.get_logger(__name__)
 
 
 class Settings(Enum):
+    IMEI_CHECK_API_TOKEN = environ.get("IMEI_CHECK_API_TOKEN", None)
     SERVER_HOST = environ.get('SERVER_HOST', 'http://192.168.0.107')
     SERVER_PORT = environ.get('SERVER_PORT', 8000)
     API_BASE_PATH = environ.get('API_BASE_PATH', '/api')
