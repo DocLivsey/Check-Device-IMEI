@@ -15,7 +15,7 @@ async def start_handler_logic(
     url = f'{api_host}{api_base_path}{api_version}/check-imei/hello/'
 
     logger.info(
-        'starting work of `start_handler` logic'
+        'Starting work of `start_handler` logic. '
         'Trying to send request to API to get welcome message',
         token=token,
         url=url,
