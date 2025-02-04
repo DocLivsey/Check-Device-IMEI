@@ -17,7 +17,7 @@ async def check_imei(request: Request):
     logger.info(
         'Handle GET request to API for check device IMEI',
         request_headers=request.headers,
-        request_body=request.body(),
+        request_body=await request.body(),
     )
     
     request_headers = request.headers
