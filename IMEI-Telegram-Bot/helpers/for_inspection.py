@@ -46,6 +46,14 @@ async def check_imei_handler_begin_logic(
 
     await message.answer(message_text)
 
+
+async def check_imei_handler_ending_logic(
+        users_tokens: dict,
+        message: Message,
+):
+    url = f'{api_host}{api_base_path}{api_version}/check-imei/'
+    user_id = message.from_user.id
+    token = users_tokens[user_id]
     given_imei = message.text
     imei: str = validate_imei(given_imei)
 
