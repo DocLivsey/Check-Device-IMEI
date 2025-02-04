@@ -4,10 +4,9 @@ from aiogram import Router, types, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 
-from helpers.for_inspection import check_imei_handler_begin_logic
+from helpers.for_inspection import check_imei_handler_begin_logic, check_imei_handler_ending_logic
 from helpers.functiontools import auth_required, passed_auth_then_do
 from imei_bot.bot_states import ChecksStates
-from settings import api_host, api_base_path, api_version
 from helpers.decorators import bot_logger
 
 logger = structlog.get_logger(__name__)
@@ -36,3 +35,9 @@ async def check_imei_handler_ending(
         users_tokens: dict
 ):
     await auth_required(users_tokens, message.from_user, message)
+
+    await passed_auth_then_do(
+        users_tokens,
+        message,
+        check_imei_handler_ending_logic
+    )
