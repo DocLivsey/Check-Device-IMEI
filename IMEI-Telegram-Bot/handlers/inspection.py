@@ -3,7 +3,8 @@ import structlog
 from aiogram import Router, types
 from aiogram.filters import Command
 
-from helpers.functiontools import auth_required
+from helpers.for_inspection import check_imei_handler_logic
+from helpers.functiontools import auth_required, passed_auth_then_do
 from settings import api_host, api_base_path, api_version
 from helpers.decorators import bot_logger
 
@@ -19,17 +20,8 @@ async def check_imei_handler(
 ):
     await auth_required(users_tokens, message.from_user, message)
 
-    response = requests.get(
-        url=f'{api_host}{api_base_path}{api_version}/hello/',
-        headers={
-            'Authorization': 'Token 1994b2e652bf40d047300d2928b740fa8afc94f5'
-        }
+    await passed_auth_then_do(
+        users_tokens,
+        message,
+        check_imei_handler_logic
     )
-
-    logger.debug(
-        'response is',
-        response=response,
-    )
-
-    to_user = response.json().get('message')
-    await message.answer(to_user)

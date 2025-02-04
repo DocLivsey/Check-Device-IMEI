@@ -7,16 +7,17 @@ from schemas.auth import UserStatus
 from settings import api_host, api_base_path, api_version
 
 logger = structlog.get_logger(__name__)
+INVALID_MESSAGE = 'Invalid IMEI'
 
 
 async def check_imei_handler_logic(
         users_tokens: dict,
         message: Message,
-        imei: str
 ):
     url = f'{api_host}{api_base_path}{api_version}/check-imei/'
     user_id = message.from_user.id
     token = users_tokens[user_id]
+    imei: str = validate_imei(message.text)
 
     logger.info(
         'Starting work of `start_handler` logic. '
@@ -34,6 +35,19 @@ async def check_imei_handler_logic(
         )
 
         message_text = 'You are not allowed to perform this action because you was been blocked'
+
+        await message.answer(message_text)
+        return
+
+    if imei == INVALID_MESSAGE:
+        logger.error(
+            'throw message that given IMEI is invalid',
+            token=token,
+            user=user_id,
+            imei=imei,
+        )
+
+        message_text = f'Given IMEI ({imei}) is invalid'
 
         await message.answer(message_text)
         return
@@ -63,3 +77,24 @@ async def check_imei_handler_logic(
         return
 
     return
+
+
+def is_valid_imei(imei: str) -> bool:
+    return imei.isdigit() and 8 <= len(imei) <= 15
+
+
+def validate_imei_or_else_throw(imei: str, default: str=INVALID_MESSAGE) -> str:
+    if not is_valid_imei(imei):
+        logger.error(
+            'Invalid imei, return default',
+            imei=imei,
+            default=default,
+        )
+        return default
+
+    return imei
+
+
+def validate_imei(imei: str) -> str:
+    return validate_imei_or_else_throw(imei)
+
