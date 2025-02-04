@@ -46,7 +46,8 @@ async def check_imei_handler_logic(
 
     await message.answer(message_text)
 
-    imei: str = validate_imei(message.text)
+    given_imei = message.text
+    imei: str = validate_imei(given_imei)
 
     logger.info(
         'IMEI received from the user',
@@ -62,7 +63,7 @@ async def check_imei_handler_logic(
             imei=imei,
         )
 
-        message_text = f'Given IMEI ({imei}) is invalid'
+        message_text = f'Given IMEI ({given_imei}) is invalid'
 
         await message.answer(message_text)
         return
