@@ -12,16 +12,20 @@ def block_users(modeladmin, request, queryset):
 block_users.short_description = "Block selected users"
 
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'first_name', 'last_name', 'is_staff', 'is_active')
-    search_fields = ('username', 'first_name', 'last_name')
-    ordering = ('username',)
-    list_filter = ('is_staff', 'is_active')
-    actions = [block_users]
-    
-    
 class UserAdminForm(ModelForm):
     class Meta:
         model = User
         fields = '__all__'
+
+
+admin.site.unregister(User)
+
+
+@admin.register(User)
+class CustomUserAdmin(admin.ModelAdmin):
+    form = UserAdminForm
+
+    list_display = ('username', 'first_name', 'last_name', 'is_staff', 'is_active')
+    search_fields = ['username', 'first_name', 'last_name']
+    list_filter = ['is_staff', 'is_active']
+    actions = [block_users]
