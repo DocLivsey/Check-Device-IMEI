@@ -40,7 +40,7 @@ class TelegramAuthView(APIView):
         if not user.is_active:
             return Response(
                 {
-                    "message": "User is not active"
+                    "message": "User is blocked"
                 }, 
                 status=status.HTTP_403_FORBIDDEN
             )
