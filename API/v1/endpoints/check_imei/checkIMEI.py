@@ -12,4 +12,7 @@ check_imei_router = APIRouter()
 
 @check_imei_router.get('/', response_model=HelloScheme)
 async def check_imei(request: Request):
-    pass
+    logger.info(
+        'Handle GET request to API for check device IMEI',
+        request=request,
+    )
