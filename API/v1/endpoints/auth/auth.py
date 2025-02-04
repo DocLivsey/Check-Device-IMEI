@@ -3,6 +3,7 @@ from fastapi.responses import Response
 from pydantic import ValidationError
 import structlog
 import requests
+from starlette import status
 
 logger = structlog.get_logger(__name__)
 
@@ -41,9 +42,9 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             data_from_user=from_user_data,
         )
 
-        return Response(
-            status_code=404,
-            content=validation_error.json(),
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=validation_error.json()
         )
 
     except HTTPException as http_exception:
@@ -54,9 +55,9 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             data_from_user=from_user_data,
         )
 
-        return Response(
+        raise HTTPException(
             status_code=http_exception.status_code,
-            content=http_exception.detail,
+            detail=http_exception.detail,
         )
 
     except Exception as exception:
@@ -67,9 +68,9 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             data_from_user=from_user_data,
         )
 
-        return Response(
-            status_code=400,
-            content=str(exception),
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exception),
         )
     
     if response.status_code == 403:
@@ -80,9 +81,9 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             response=response.text,
         )
 
-        return Response(
+        raise HTTPException(
             status_code=response.status_code,
-            content=response.json(),
+            detail=response.json()
         )
     
     if response.status_code != 200:
@@ -93,9 +94,9 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             response=response.text,
         )
 
-        return Response(
+        raise HTTPException(
             status_code=response.status_code,
-            content=response.json(),
+            detail=response.json()
         )
         
     if 'token' and 'telegram_id' not in response.json():
@@ -104,9 +105,9 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             response=response.json(),
         )
 
-        return Response(
-            status_code=400,
-            content={'message': 'Invalid response from server'},
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Invalid response from server'
         )
         
     logger.info(
