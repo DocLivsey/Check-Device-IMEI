@@ -17,10 +17,11 @@ async def check_imei(request: Request):
     logger.info(
         'Handle GET request to API for check device IMEI',
         request_headers=request.headers,
-        request_body=await request.body(),
+        request_body=await request.json(),
     )
     
     request_headers = request.headers
+    request_body = await request.json()
     
     handle_401_response(request_headers)
     
@@ -30,12 +31,13 @@ async def check_imei(request: Request):
         'Authorization': request_headers['authorization']
     }
     response: requests.Response
-    imei: str = await request.json()['imei']
+    imei: str = request_body.get('imei')
     try:
         logger.debug(
             'Get data from bot`s request and trying to Send POST request to get info about device',
             endpoint=imei_check_url,
             headers=headers,
+            body=request_body,
             imei=imei,
         )
 
