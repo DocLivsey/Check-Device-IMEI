@@ -39,11 +39,12 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             endpoint=url,
             data_from_user=from_user_data,
         )
+
+        response = requests.Response()
+        response.status_code = 404
+        response.reason = str(validation_error)
         
-        return {
-            'status_code' : 404,
-            'detail': str(validation_error)
-        }
+        return response
     except HTTPException as http_exception:
         logger.error(
             'HTTP error occurred',
