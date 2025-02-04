@@ -94,7 +94,7 @@ def authenticate(users_tokens: dict, user: User):
         
         return
     
-    if not users_tokens[user_id]:
+    if not users_tokens[user_id] or users_tokens[user_id] == UserStatus.BLOCKED:
         logger.info(
             'user not authenticated, sending request to authenticate user',
             user=user_id
