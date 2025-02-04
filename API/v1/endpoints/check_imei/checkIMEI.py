@@ -7,7 +7,7 @@ from v1.functiontools import handle_401_response
 logger = structlog.get_logger(__name__)
 
 from v1.schemas.checkIMEI import IMEICheckScheme, to_imei_check
-from settings import server_host, api_base_path, api_version
+from settings import server_host, api_base_path, api_version, imei_check_api_token
 
 check_imei_router = APIRouter()
 
@@ -30,7 +30,7 @@ async def check_imei(request: Request):
     url = f'{server_host}{api_base_path}{api_version}/check-imei/'
     imei_check_url = 'https://api.imeicheck.net/v1/checks'
     headers: dict = {
-        'Authorization': request_headers['authorization']
+        'Authorization': f'Bearer {imei_check_api_token}'
     }
     response: requests.Response
     imei: str = request_body.get('imei')
