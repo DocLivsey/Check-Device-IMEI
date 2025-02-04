@@ -40,7 +40,7 @@ async def auth_required(users_tokens: dict, user: User, message: Message):
     user_id: int = user.id
 
     logger.info(
-        'requere authentication',
+        'require authentication',
         for_user=user_id
     )
     
