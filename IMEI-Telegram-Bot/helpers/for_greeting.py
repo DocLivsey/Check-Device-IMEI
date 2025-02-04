@@ -21,6 +21,7 @@ async def start_handler_logic(
         url=url,
     )
 
+    # TODO: prevents the user's blocking from being re-revoked, if the user is unbanned, the request is still not sent.
     if token == UserStatus.BLOCKED:
         logger.error(
             'User was blocked'
