@@ -2,6 +2,8 @@ from fastapi import APIRouter, Request, HTTPException, status
 import structlog
 import requests
 
+from v1.functiontools import handle_401
+
 logger = structlog.get_logger(__name__)
 
 from v1.routers.auth import router as auth_router
@@ -23,32 +25,7 @@ async def hello(request: Request):
         request_body=await request.body(),
     )
 
-    if 'authorization' not in request.headers.keys():
-        logger.error(
-            'Authorization header missing',
-            request_headers=request.headers,
-            request_body=await request.body(),
-        )
-
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authorization header missing')
-
-    if not request.headers['Authorization'].startswith('Token '):
-        logger.error(
-            'Authorization header invalid',
-            request_headers=request.headers,
-            request_body=await request.body(),
-        )
-
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authorization header invalid')
-
-    if not request.headers['Authorization']:
-        logger.error(
-            'Authorization token missing',
-            request_headers=request.headers,
-            request_body=await request.body(),
-        )
-
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authorization token missing')
+    handle_401(request.headers)
 
     url = f'{server_host}{api_base_path}{api_version}/hello/'
     headers: dict = {
