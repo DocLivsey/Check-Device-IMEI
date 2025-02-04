@@ -36,7 +36,7 @@ class PropertiesResponse(BaseModel):
     warranty_status: str
     repair_coverage: str
     technical_support: str
-    model_description: str
+    model_desc: str
     demo_unit: bool
     refurbished: bool
     purchase_country: str
@@ -57,7 +57,7 @@ class PropertiesResponse(BaseModel):
             warranty_status=properties.warranty_status,
             repair_coverage=properties.repair_coverage,
             technical_support=properties.technical_support,
-            model_description=properties.model_desc,
+            model_desc=properties.model_desc,
             demo_unit=properties.demo_unit,
             refurbished=properties.refurbished,
             purchase_country=properties.purchase_country,
@@ -78,7 +78,7 @@ class PropertiesResponse(BaseModel):
         warranty_status = data['warranty_status'] if 'warranty_status' in data else 'Undefined'
         repair_coverage = data['repair_coverage'] if 'repair_coverage' in data else 'Undefined'
         technical_support = data['technical_support'] if 'technical_support' in data else 'Undefined'
-        model_description = data['model_desc'] if 'model_desc' in data else 'Undefined'
+        model_desc = data['model_desc'] if 'model_desc' in data else 'Undefined'
         demo_unit = data['demo_unit'] if 'demo_unit' in data else False
         refurbished = data['refurbished'] if 'refurbished' in data else False
         purchase_country = data['purchase_country'] if 'purchase_country' in data else 'Undefined'
@@ -97,7 +97,7 @@ class PropertiesResponse(BaseModel):
             warranty_status=warranty_status,
             repair_coverage=repair_coverage,
             technical_support=technical_support,
-            model_description=model_description,
+            model_desc=model_desc,
             demo_unit=demo_unit,
             refurbished=refurbished,
             purchase_country=purchase_country,
