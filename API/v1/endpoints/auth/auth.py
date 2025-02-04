@@ -51,11 +51,13 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             endpoint=url,
             data_from_user=from_user_data,
         )
-        
-        return {
-            'status_code' : http_exception.status_code,
-            'detail': str(http_exception)
-        }
+
+        response = requests.Response()
+        response.status_code = http_exception.status_code
+        response.reason = http_exception.detail
+
+        return response
+
     except Exception as exception:
         logger.error(
             'Exception occurred in sync process', 
@@ -63,11 +65,12 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             endpoint=url,
             data_from_user=from_user_data,
         )
-        
-        return {
-            'status_code' : 400,
-            'detail': str(exception)
-        }
+
+        response = requests.Response()
+        response.status_code = 400
+        response.reason = str(exception)
+
+        return response
     
     if response.status_code == 403:
         logger.error(
@@ -76,12 +79,8 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             reason=response.reason,
             response=response.text,
         )
-        
-        return {
-            'status_code' : response.status_code,
-            'detail': response.reason,
-            'message': 'User is blocked'
-        }
+
+        return response
     
     if response.status_code != 200:
         logger.error(
@@ -90,22 +89,17 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
             reason=response.reason,
             response=response.text,
         )
-        
-        return {
-            'status_code' : response.status_code,
-            'detail': response.reason
-        }
+
+        return response
         
     if 'token' and 'telegram_id' not in response.json():
         logger.error(
             'No token or telegram_id in response',
             response=response.json(),
         )
-        
-        return {
-            'status_code': 400,
-            'detail': 'Invalid response from server'
-        }
+
+        response.status_code = 400
+        response.reason = 'Invalid response from server'
         
     logger.info(
         'Successfully retrieved token from Django server REST API',
