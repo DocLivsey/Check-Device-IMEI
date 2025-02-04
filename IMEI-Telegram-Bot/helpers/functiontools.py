@@ -206,3 +206,30 @@ def request_auth_token(user: User):
         raise Exception('Not Authenticated')
         
     return users_token.token
+
+
+async def handle_401(message: Message, response: requests.Response, token: str):
+    if response.status_code == 401:
+        logger.error(
+            'Authentication failed',
+            token=token,
+        )
+
+        message_text = 'You are not authorized to perform this action'
+
+        await message.answer(message_text)
+        return
+
+
+async def handle_403(message: Message, response: requests.Response, token: str):
+    if response.status_code == 403:
+        logger.error(
+            'User was blocked',
+            token=token,
+            user=message.from_user.id,
+        )
+
+        message_text = 'You are not allowed to perform this action because you were been blocked'
+
+        await message.answer(message_text)
+        return

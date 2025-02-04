@@ -2,6 +2,7 @@ import requests
 import structlog
 from aiogram.types import Message
 
+from helpers.functiontools import handle_401, handle_403
 from schemas.auth import UserStatus
 from settings import api_host, api_base_path, api_version
 
@@ -52,28 +53,8 @@ async def start_handler_logic(
 
         response = request_exception.response
 
-        if response.status_code == 401:
-            logger.error(
-                'Authentication failed',
-                token=token,
-            )
-
-            message_text = 'You are not authorized to perform this action'
-
-            await message.answer(message_text)
-            return
-
-        if response.status_code == 403:
-            logger.error(
-                'User was blocked',
-                token=token,
-                user=message.from_user.id,
-            )
-
-            message_text = 'You are not allowed to perform this action because you were been blocked'
-
-            await message.answer(message_text)
-            return
+        await handle_401(message, response, token)
+        await handle_403(message, response, token)
 
         message_text = 'Something went wrong. Please try again later.'
 
