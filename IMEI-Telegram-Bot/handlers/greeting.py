@@ -20,10 +20,8 @@ async def start_handler(
 
     await passed_auth_then_do(
         users_tokens,
-        message.from_user.id,
+        message,
         start_handler_logic,
-        message=message,
-        token=users_tokens[message.from_user.id],
     )
 
 
@@ -38,7 +36,6 @@ async def help_handler(
 
     await passed_auth_then_do(
         users_tokens,
-        message.from_user.id,
+        message,
         help_handler_logic,
-        message=message,
     )

@@ -9,10 +9,12 @@ logger = structlog.get_logger(__name__)
 
 
 async def start_handler_logic(
+        users_tokens: dict,
         message: Message,
-        token: str | UserStatus,
 ):
     url = f'{api_host}{api_base_path}{api_version}/hello/'
+    user_id = message.from_user.id
+    token = users_tokens[user_id]
 
     logger.info(
         'Starting work of `start_handler` logic. '
@@ -95,5 +97,5 @@ async def start_handler_logic(
     return
 
 
-async def help_handler_logic(message: Message):
+async def help_handler_logic(users_tokens: dict, message: Message):
     await message.answer('hello')
