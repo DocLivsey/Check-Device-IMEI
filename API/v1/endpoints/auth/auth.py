@@ -60,7 +60,7 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
 
     except Exception as exception:
         logger.error(
-            'Exception occurred in sync process', 
+            'Exception occurred',
             exc_info=exception,
             endpoint=url,
             data_from_user=from_user_data,
