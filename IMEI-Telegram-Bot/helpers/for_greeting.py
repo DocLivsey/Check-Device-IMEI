@@ -45,6 +45,11 @@ async def start_handler_logic(
             token=token,
             exception=str(request_exception),
         )
+
+        message_text = 'Something went wrong. Please try again later.'
+
+        await message.answer(message_text)
+        return
         
     if response.status_code == 401:
         logger.error(
