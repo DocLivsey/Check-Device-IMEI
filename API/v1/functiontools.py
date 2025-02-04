@@ -5,7 +5,7 @@ import structlog
 logger = structlog.get_logger(__name__)
 
 
-def handle_401(headers: Headers):
+def handle_401_response(headers: Headers):
     if 'authorization' not in headers.keys():
         logger.error(
             'Authorization header missing',

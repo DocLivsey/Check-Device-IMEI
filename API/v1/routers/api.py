@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, HTTPException, status
 import structlog
 import requests
 
-from v1.functiontools import handle_401
+from v1.functiontools import handle_401_response
 
 logger = structlog.get_logger(__name__)
 
@@ -25,7 +25,7 @@ async def hello(request: Request):
         request_body=await request.body(),
     )
 
-    handle_401(request.headers)
+    handle_401_response(request.headers)
 
     url = f'{server_host}{api_base_path}{api_version}/hello/'
     headers: dict = {
