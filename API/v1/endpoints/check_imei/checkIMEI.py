@@ -29,3 +29,12 @@ async def check_imei(request: Request):
         'Authorization': request_headers['authorization']
     }
     response: requests.Response
+    try:
+        logger.debug(
+            'Get data from bot`s request and trying to Send POST request to get info about device',
+            endpoint=imei_check_url,
+            headers=headers,
+        )
+
+    except Exception as e:
+        pass
