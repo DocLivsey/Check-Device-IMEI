@@ -17,7 +17,8 @@ router = Router()
 @router.message(Command('check_imei'))
 async def check_imei_handler_begin(
         message: types.Message,
-        users_tokens: dict
+        users_tokens: dict,
+        state: FSMContext
 ):
     await auth_required(users_tokens, message.from_user, message)
 
@@ -26,6 +27,8 @@ async def check_imei_handler_begin(
         message,
         check_imei_handler_begin_logic
     )
+
+    await state.set_state(ChecksStates.waiting)
 
 
 @bot_logger
