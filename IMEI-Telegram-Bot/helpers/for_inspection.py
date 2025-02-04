@@ -19,14 +19,12 @@ async def check_imei_handler_logic(
     url = f'{api_host}{api_base_path}{api_version}/check-imei/'
     user_id = message.from_user.id
     token = users_tokens[user_id]
-    imei: str = validate_imei(message.text)
 
     logger.info(
         'Starting work of `start_handler` logic. '
         'Trying to send request to API to get welcome message',
         token=token,
         user=user_id,
-        imei=imei,
         url=url,
     )
 
@@ -40,6 +38,21 @@ async def check_imei_handler_logic(
 
         await message.answer(message_text)
         return
+
+    message_text = (
+        'Ok, if You want to check your device by IMEI, send me IMEI '
+        '(it is a code consisting only of digits and 8 to 15 characters long).'
+    )
+
+    await message.answer(message_text)
+
+    imei: str = validate_imei(message.text)
+
+    logger.info(
+        'IMEI received from the user',
+        user=user_id,
+        imei=imei,
+    )
 
     if imei == INVALID_MESSAGE:
         logger.error(
