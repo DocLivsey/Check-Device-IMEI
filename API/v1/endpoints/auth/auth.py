@@ -45,6 +45,7 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
         response.reason = str(validation_error)
         
         return response
+
     except HTTPException as http_exception:
         logger.error(
             'HTTP error occurred',
