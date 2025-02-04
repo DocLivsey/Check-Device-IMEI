@@ -12,7 +12,7 @@ logger = structlog.get_logger(__name__)
 INVALID_MESSAGE = 'Invalid IMEI'
 
 
-async def check_imei_handler_logic(
+async def check_imei_handler_begin_logic(
         users_tokens: dict,
         message: Message,
 ):
