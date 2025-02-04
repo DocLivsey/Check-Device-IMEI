@@ -1,6 +1,6 @@
 import requests
 import structlog
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
 
 from v1.functiontools import handle_401_response
 
@@ -11,7 +11,7 @@ from settings import server_host, api_base_path, api_version
 
 check_imei_router = APIRouter()
 
-DEFAULT_SERVICE_ID = '1'
+DEFAULT_SERVICE_ID = 1
 
 
 @check_imei_router.get('/', response_model=IMEICheckScheme)
@@ -34,6 +34,11 @@ async def check_imei(request: Request):
     }
     response: requests.Response
     imei: str = request_body.get('imei')
+    body = {
+        'deviceId': imei,
+        'serviceId': DEFAULT_SERVICE_ID,
+    }
+    print(type(imei))
     try:
         logger.debug(
             'Get data from bot`s request and trying to Send POST request to get info about device',
@@ -41,6 +46,25 @@ async def check_imei(request: Request):
             headers=headers,
             body=request_body,
             imei=imei,
+        )
+
+        response = requests.post(
+            url=imei_check_url,
+            headers=headers,
+            json=body,
+        )
+
+    except HTTPException as http_exception:
+        logger.error(
+            'HTTP error occurred',
+            http_error=str(http_exception),
+            endpoint=imei_check_url,
+            body=body,
+        )
+
+        raise HTTPException(
+            status_code=http_exception.status_code,
+            detail=http_exception.detail,
         )
 
     except Exception as e:
