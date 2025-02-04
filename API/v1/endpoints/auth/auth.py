@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import Response
 from pydantic import ValidationError
-from typing import Union
 import structlog
 import requests
 
@@ -13,7 +12,7 @@ from v1.schemas.auth import TokenSchema, TelegramUserSchema, to_telegram_user, t
 auth_router = APIRouter()
 
 
-@auth_router.post(f'{api_url_take_token}', response_model=Union[TokenSchema, Response])
+@auth_router.post(f'{api_url_take_token}', response_model=TokenSchema)
 async def telegram_token_auth(from_user_data: TelegramUserSchema):
     logger.info(
         'Handle POST request to API for Telegram token authentication with',
