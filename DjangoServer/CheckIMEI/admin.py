@@ -37,4 +37,4 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_display = ('username', 'first_name', 'last_name', 'is_staff', 'is_active')
     search_fields = ['username', 'first_name', 'last_name']
     list_filter = ['is_staff', 'is_active']
-    actions = [block_users]
+    actions = [block_users, unblock_users]
