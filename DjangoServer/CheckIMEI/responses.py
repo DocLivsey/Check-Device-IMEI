@@ -1,15 +1,13 @@
 import uuid
 
+from pydantic import BaseModel
+
 from CheckIMEI.models import Service, Property, IMEICheck
 
 
-class ServiceResponse:
+class ServiceResponse(BaseModel):
     title: str
     price: str
-
-    def __init__(self, title: str, price: str) -> None:
-        self.title = title
-        self.price = price
 
     @staticmethod
     def to_service_response(service: Service):
@@ -23,10 +21,13 @@ class ServiceResponse:
         title = data['title'] if 'title' in data else 'Undefined'
         price = data['price'] if 'price' in data else 'Undefined'
 
-        return ServiceResponse(title, price)
+        return ServiceResponse(
+            title=title,
+            price=price
+        )
 
 
-class PropertiesResponse:
+class PropertiesResponse(BaseModel):
     device_name: str
     image: str
     imei: str
@@ -44,44 +45,6 @@ class PropertiesResponse:
     lost_mode: str
     usa_block_status: str
     network: str
-
-    def __init__(
-            self,
-            device_name: str,
-            image: str,
-            imei: str,
-            est_purchase_date: int,
-            sim_lock: bool,
-            warranty_status: str,
-            repair_coverage: str,
-            technical_support: str,
-            model_desc: str,
-            demo_unit: bool,
-            refurbished: bool,
-            purchase_country: str,
-            apple_region: str,
-            fmi_on: bool,
-            lost_mode: str,
-            usa_block_status: str,
-            network: str,
-    ):
-        self.device_name = device_name
-        self.image = image
-        self.imei = imei
-        self.est_purchase_date = est_purchase_date
-        self.sim_lock = sim_lock
-        self.warranty_status = warranty_status
-        self.repair_coverage = repair_coverage
-        self.technical_support = technical_support
-        self.model_desc = model_desc
-        self.demo_unit = demo_unit
-        self.refurbished = refurbished
-        self.purchase_country = purchase_country
-        self.apple_region = apple_region
-        self.fmi_on = fmi_on
-        self.lost_mode = lost_mode
-        self.usa_block_status = usa_block_status
-        self.network = network
 
     @staticmethod
     def to_properties_response(properties: Property):
@@ -125,28 +88,28 @@ class PropertiesResponse:
         usa_block_status = data['usa_block_status'] if 'usa_block_status' in data else 'Undefined'
         network = data['network'] if 'network' in data else 'Undefined'
 
-        return PropertiesResponse(
-            device_name,
-            image,
-            imei,
-            est_purchase_date,
-            sim_lock,
-            warranty_status,
-            repair_coverage,
-            technical_support,
-            model_desc,
-            demo_unit,
-            refurbished,
-            purchase_country,
-            apple_region,
-            fmi_on,
-            lost_mode,
-            usa_block_status,
-            network,
+        return PropertiesScheme(
+            device_name=device_name,
+            image=image,
+            imei=imei,
+            est_purchase_date=est_purchase_date,
+            sim_lock=sim_lock,
+            warranty_status=warranty_status,
+            repair_coverage=repair_coverage,
+            technical_support=technical_support,
+            model_desc=model_desc,
+            demo_unit=demo_unit,
+            refurbished=refurbished,
+            purchase_country=purchase_country,
+            apple_region=apple_region,
+            fmi_on=fmi_on,
+            lost_mode=lost_mode,
+            usa_block_status=usa_block_status,
+            network=network,
         )
 
 
-class IMEICheckResponse:
+class IMEICheckResponse(BaseModel):
     id: str
     type: str
     status: str
@@ -156,28 +119,6 @@ class IMEICheckResponse:
     device_id: str
     processed_at: int
     properties: PropertiesResponse
-
-    def __init__(
-            self,
-            id: str,
-            type: str,
-            status: str,
-            order_id: str,
-            service: ServiceResponse,
-            amount: str,
-            device_id: str,
-            processed_at: int,
-            properties: PropertiesResponse,
-    ):
-        self.id = id
-        self.type = type
-        self.status = status
-        self.order_id = order_id
-        self.service = service
-        self.amount = amount
-        self.device_id = device_id
-        self.processed_at = processed_at
-        self.properties = properties
 
     @staticmethod
     def to_imei_check_response(imei_check: IMEICheck):
