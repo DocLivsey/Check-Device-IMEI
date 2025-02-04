@@ -76,29 +76,6 @@ async def start_handler_logic(
         await message.answer(message_text)
         return
 
-    if response.status_code == 401:
-        logger.error(
-            'Authentication failed',
-            token=token,
-        )
-
-        message_text = 'You are not authorized to perform this action'
-
-        await message.answer(message_text)
-        return
-
-    if response.status_code == 403:
-        logger.error(
-            'User was blocked',
-            token=token,
-            user=message.from_user.id,
-        )
-
-        message_text = 'You are not allowed to perform this action because you were been blocked'
-
-        await message.answer(message_text)
-        return
-
     if 'message' not in response.json():
         logger.error(
             'No message received from API',
