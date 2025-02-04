@@ -1,6 +1,6 @@
 import requests
 import structlog
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, status
 
 from v1.functiontools import handle_401_response
 
@@ -67,5 +67,15 @@ async def check_imei(request: Request):
             detail=http_exception.detail,
         )
 
-    except Exception as e:
-        pass
+    except Exception as exception:
+        logger.error(
+            'Exception occurred',
+            exc_info=exception,
+            endpoint=url,
+            body=body,
+        )
+
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exception),
+        )
