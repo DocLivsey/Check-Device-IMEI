@@ -11,6 +11,8 @@ from settings import server_host, api_base_path, api_version
 
 check_imei_router = APIRouter()
 
+DEFAULT_SERVICE_ID = '1'
+
 
 @check_imei_router.get('/', response_model=IMEICheckScheme)
 async def check_imei(request: Request):
