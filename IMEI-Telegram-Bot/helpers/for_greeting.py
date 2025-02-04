@@ -12,7 +12,7 @@ async def start_handler_logic(
         message: Message,
         token: str | UserStatus,
 ):
-    url = f'{api_host}{api_base_path}{api_version}/check-imei/hello/'
+    url = f'{api_host}{api_base_path}{api_version}/hello/'
 
     logger.info(
         'Starting work of `start_handler` logic. '
