@@ -25,6 +25,7 @@ logger.info(
     settings=Settings.to_string()
 )
 
+imei_check_api_token = Settings.IMEI_CHECK_API_TOKEN.value
 server_host = Settings.SERVER_HOST.value
 server_port = Settings.SERVER_PORT.value
 api_base_path = Settings.API_BASE_PATH.value
