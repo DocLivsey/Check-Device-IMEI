@@ -1,18 +1,18 @@
-from fastapi import APIRouter, Request, HTTPException, status
-import structlog
 import requests
+import structlog
+from fastapi import APIRouter, Request
 
 from v1.functiontools import handle_401_response
 
 logger = structlog.get_logger(__name__)
 
-from v1.schemas.checkIMEI import HelloScheme, to_message
+from v1.schemas.checkIMEI import IMEICheckScheme
 from settings import server_host, api_base_path, api_version
 
 check_imei_router = APIRouter()
 
 
-@check_imei_router.get('/', response_model=HelloScheme)
+@check_imei_router.get('/', response_model=IMEICheckScheme)
 async def check_imei(request: Request):
     logger.info(
         'Handle GET request to API for check device IMEI',
