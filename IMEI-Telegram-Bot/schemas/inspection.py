@@ -74,3 +74,39 @@ def to_properties(properties_data: dict):
         usa_block_status=usa_block_status,
         network=network,
     )
+
+
+class IMEICheckScheme(BaseModel):
+    id: str
+    type: str
+    status: str
+    order_id: str
+    service: ServiceScheme
+    amount: str
+    device_id: str
+    processed_at: int
+    properties: PropertiesScheme
+
+
+def to_imei_check(data: dict):
+    id = data['id'] if 'id' in data else str(uuid.uuid4())
+    type = data['type'] if 'type' in data else 'Undefined'
+    status = data['status'] if 'status' in data else 'Undefined'
+    order_id = data['order_id'] if 'order_id' in data else 'Undefined'
+    service = data['service'] if 'service' in data else {}
+    amount = data['amount'] if 'amount' in data else 'Undefined'
+    device_id = data['device_id'] if 'device_id' in data else 'Undefined'
+    processed_at = data['processed_at'] if 'processed_at' in data else -1
+    properties = data['properties'] if 'properties' in data else {}
+
+    return IMEICheckScheme(
+        id=id,
+        type=type,
+        status=status,
+        order_id=order_id,
+        service=to_service(service),
+        amount=amount,
+        device_id=device_id,
+        processed_at=processed_at,
+        properties=to_properties(properties),
+    )
