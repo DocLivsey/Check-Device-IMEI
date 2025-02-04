@@ -88,7 +88,7 @@ class PropertiesResponse(BaseModel):
         usa_block_status = data['usa_block_status'] if 'usa_block_status' in data else 'Undefined'
         network = data['network'] if 'network' in data else 'Undefined'
 
-        return PropertiesScheme(
+        return PropertiesResponse(
             device_name=device_name,
             image=image,
             imei=imei,
