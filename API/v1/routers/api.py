@@ -87,6 +87,26 @@ async def hello(request: Request):
 
         raise HTTPException(status_code=400, detail=str(exception))
 
+    if response.status_code == 401:
+        logger.error(
+            'Authorization failed',
+            status_code=response.status_code,
+            request_headers=headers,
+            endpoint=url,
+        )
+
+        raise HTTPException(status_code=401, detail='Authorization failed')
+
+    if response.status_code == 403:
+        logger.error(
+            'User was blocked',
+            status_code=response.status_code,
+            request_headers=headers,
+            endpoint=url,
+        )
+
+        raise HTTPException(status_code=403, detail='User was blocked')
+
     logger.info(
         'Successfully retrieved message from Django server REST API',
         message=response.json().get('message'),
