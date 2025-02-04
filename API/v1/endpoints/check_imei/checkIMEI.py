@@ -30,11 +30,13 @@ async def check_imei(request: Request):
         'Authorization': request_headers['authorization']
     }
     response: requests.Response
+    imei: str = await request.json()['imei']
     try:
         logger.debug(
             'Get data from bot`s request and trying to Send POST request to get info about device',
             endpoint=imei_check_url,
             headers=headers,
+            imei=imei,
         )
 
     except Exception as e:
