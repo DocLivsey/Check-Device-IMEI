@@ -9,7 +9,16 @@ def block_users(modeladmin, request, queryset):
         user.save()
         
 
-block_users.short_description = "Block selected users"
+block_users.short_description = 'Block selected users'
+
+
+def unblock_users(modeladmin, request, queryset):
+    for user in queryset:
+        user.is_active = True
+        user.save()
+        
+
+unblock_users.short_description = 'Unblock selected users'
 
 
 class UserAdminForm(ModelForm):
