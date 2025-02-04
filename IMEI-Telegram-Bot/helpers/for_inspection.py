@@ -45,6 +45,7 @@ async def check_imei_handler_begin_logic(
     )
 
     await message.answer(message_text)
+    return
 
 
 async def check_imei_handler_ending_logic(
