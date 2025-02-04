@@ -29,7 +29,12 @@ async def passed_auth_then_do(
         *args,
         **kwargs
 ):
+    # answer to user 'hello' if all requests will be sent
     if is_authenticated(users_tokens, user_id):
+        await handler(*args, **kwargs)
+
+    # answer to user 'You are not allowed to perform this action because you are blocked'
+    elif user_id in users_tokens and users_tokens[user_id] is not None and users_tokens[user_id] == UserStatus.BLOCKED:
         await handler(*args, **kwargs)
 
     else:
