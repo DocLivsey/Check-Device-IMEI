@@ -1,9 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import Response
 from pydantic import ValidationError
 import structlog
 import requests
-from starlette import status
 
 logger = structlog.get_logger(__name__)
 
