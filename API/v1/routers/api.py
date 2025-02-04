@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, status
 import structlog
 import requests
 
@@ -30,7 +30,7 @@ async def hello(request: Request):
             request_body=await request.body(),
         )
 
-        raise HTTPException(status_code=401, detail='Authorization header missing')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authorization header missing')
 
     if not request.headers['Authorization'].startswith('Token '):
         logger.error(
@@ -39,7 +39,7 @@ async def hello(request: Request):
             request_body=await request.body(),
         )
 
-        raise HTTPException(status_code=401, detail='Authorization header invalid')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authorization header invalid')
 
     if not request.headers['Authorization']:
         logger.error(
@@ -48,7 +48,7 @@ async def hello(request: Request):
             request_body=await request.body(),
         )
 
-        raise HTTPException(status_code=401, detail='Authorization token missing')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authorization token missing')
 
     url = f'{server_host}{api_base_path}{api_version}/hello/'
     headers: dict = {
@@ -85,7 +85,7 @@ async def hello(request: Request):
             headers=headers,
         )
 
-        raise HTTPException(status_code=400, detail=str(exception))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exception))
 
     if response.status_code == 401:
         logger.error(
@@ -95,7 +95,7 @@ async def hello(request: Request):
             endpoint=url,
         )
 
-        raise HTTPException(status_code=401, detail='Authorization failed')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authorization failed')
 
     if response.status_code == 403:
         logger.error(
@@ -105,7 +105,7 @@ async def hello(request: Request):
             endpoint=url,
         )
 
-        raise HTTPException(status_code=403, detail='User was blocked')
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='User was blocked')
 
     logger.info(
         'Successfully retrieved message from Django server REST API',
