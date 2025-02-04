@@ -93,7 +93,7 @@ def authenticate(users_tokens: dict, user: User):
             user=user_id
         )
         
-        users_tokens[user_id] = request_auth_token(user).token
+        users_tokens[user_id] = request_auth_token(user)
         
         logger.info(
             'User authenticated successfully',
