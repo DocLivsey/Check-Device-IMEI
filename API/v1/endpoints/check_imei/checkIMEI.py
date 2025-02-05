@@ -31,12 +31,7 @@ async def check_imei(request: Request):
     request_body = await request.json()
     
     handle_401_response(request_headers)
-    
-    url = f'{server_host}{api_base_path}{api_version}/check-imei/'
-    imei_check_url = 'https://api.imeicheck.net/v1/checks'
-    imei: str = request_body.get('imei')
-    server_response: requests.Response
-    imei_check_response: requests.Response
+
     imei_check_headers: dict = {
         'Authorization': f'Bearer {imei_check_api_token}'
     }
@@ -61,8 +56,42 @@ async def check_imei(request: Request):
     return to_imei_check(imei_check_response.json())
 
 
-def request_imei_check(request: Request):
-    pass
+def request_imei_check(request_headers, request_body):
+    url = f'{server_host}{api_base_path}{api_version}/check-imei/'
+    imei_check_url = 'https://api.imeicheck.net/v1/checks'
+    
+    imei: str = request_body.get('imei')
+    
+    headers: dict = {
+        'Authorization': request_headers.get('authorization'),
+    }
+    body: dict = {
+        'imei': imei,
+    }
+    
+    response: requests.Response
+    try:
+        response = handle_server_GET_request(url=url, headers=headers, body=body)
+        
+    except HTTPException as http_exception:
+        if http_exception.status_code == status.HTTP_404_NOT_FOUND:
+            logger.warning(
+                'No such entry in the database for IMEI',
+                imei=imei,
+                endpoint=url,
+                headers=headers,
+                body=body,
+            )
+            
+            headers = {
+                'Authorization': f'Bearer {imei_check_api_token}'
+            }
+            body = {
+                'deviceId': imei,
+                'serviceId': DEFAULT_SERVICE_ID,
+            }
+            
+            response = handle_imei_check_request(url=imei_check_url, headers=headers, body=body)
 
 
 def handle_server_GET_request(url: str, headers: dict, body: dict) -> requests.Response:
