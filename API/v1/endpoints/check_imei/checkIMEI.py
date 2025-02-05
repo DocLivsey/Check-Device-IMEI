@@ -83,15 +83,16 @@ def request_imei_check(request_headers, request_body):
                 body=body,
             )
             
-            headers = {
+            imei_check_headers: dict = {
                 'Authorization': f'Bearer {imei_check_api_token}'
             }
-            body = {
+            imei_check_body: dict = {
                 'deviceId': imei,
                 'serviceId': DEFAULT_SERVICE_ID,
             }
             
-            response = handle_imei_check_request(url=imei_check_url, headers=headers, body=body)
+            response = handle_imei_check_request(url=imei_check_url, headers=imei_check_headers, body=imei_check_body)
+            
 
 
 def handle_server_GET_request(url: str, headers: dict, body: dict) -> requests.Response:
