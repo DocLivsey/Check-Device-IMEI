@@ -14,6 +14,11 @@ check_imei_router = APIRouter()
 DEFAULT_SERVICE_ID = 1
 
 
+class Methods:
+    POST = 'POST'
+    GET = 'GET'
+
+
 @check_imei_router.get('/', response_model=IMEICheckScheme)
 async def check_imei(request: Request):
     logger.info(
@@ -29,35 +34,88 @@ async def check_imei(request: Request):
     
     url = f'{server_host}{api_base_path}{api_version}/check-imei/'
     imei_check_url = 'https://api.imeicheck.net/v1/checks'
-    headers: dict = {
+    imei: str = request_body.get('imei')
+    server_response: requests.Response
+    imei_check_response: requests.Response
+    imei_check_headers: dict = {
         'Authorization': f'Bearer {imei_check_api_token}'
     }
-    response: requests.Response
-    imei: str = request_body.get('imei')
-    body = {
+    imei_check_body: dict = {
         'deviceId': imei,
         'serviceId': DEFAULT_SERVICE_ID,
     }
-    print(type(imei))
+    
+    api_headers: dict = {
+        'Authorization': request_headers.get('authorization'),
+    }
+    api_body: dict = {
+        'imei': imei,
+    }
+            
+    server_response = requests.get(
+        url=url,
+        headers=api_headers,
+        json=api_body,
+    )
+
+    return to_imei_check(imei_check_response.json())
+
+
+def request_imei_check(request: Request):
+    pass
+
+
+def handle_server_GET_request(url: str, headers: dict, body: dict) -> requests.Response:
+    debug_log_text = 'Get data from bot`s request and trying to Send GET request to server`s REST to get info about device from database'
+    handle_request(url, headers, body, Methods.GET, debug_log_text)
+
+
+def handle_server_POST_request(url: str, headers: dict, body: dict) -> requests.Response:
+    debug_log_text = 'Sending data to server by POST request to save entry about device'
+    handle_request(url, headers, body, Methods.POST, debug_log_text)
+
+
+def handle_imei_check_request(url: str, headers: dict, body: dict) -> requests.Response:
+    dedug_log_text = 'Get data from bot`s request and trying to Send POST request to get info about device'
+    handle_request(url, headers, body, Methods.POST, dedug_log_text)
+
+
+def handle_request(
+    url: str, 
+    headers: dict, 
+    body: dict,
+    method: Methods,
+    debug_log_txt: str
+) -> requests.Response:
+    response: requests.Response
     try:
         logger.debug(
-            'Get data from bot`s request and trying to Send POST request to get info about device',
-            endpoint=imei_check_url,
+            debug_log_txt,
+            endpoint=url,
             headers=headers,
-            body=request_body,
-            imei=imei,
+            body=body,
         )
-
-        response = requests.post(
-            url=imei_check_url,
-            headers=headers,
-            json=body,
-        )
+        
+        if method == Methods.GET:
+            response = requests.get(
+                url=imei_check_url,
+                headers=headers,
+                json=body,
+            )
+            
+        elif method == Methods.POST:
+            response = requests.post(
+                url=imei_check_url,
+                headers=headers,
+                json=body,
+            )
+            
     except HTTPException as http_exception:
         logger.error(
             'HTTP error occurred',
             http_error=str(http_exception),
             endpoint=imei_check_url,
+            headers=headers,
             body=body,
         )
 
@@ -71,6 +129,7 @@ async def check_imei(request: Request):
             'Exception occurred',
             exc_info=exception,
             endpoint=url,
+            headers=headers,
             body=body,
         )
 
@@ -78,7 +137,7 @@ async def check_imei(request: Request):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(exception),
         )
-
+        
     if response.status_code != status.HTTP_200_OK:
         logger.error(
             'Failed to get data about device by IMEI',
@@ -92,5 +151,5 @@ async def check_imei(request: Request):
             status_code=response.status_code,
             detail=response.json()
         )
-
-    return to_imei_check(response.json())
+        
+    return response
