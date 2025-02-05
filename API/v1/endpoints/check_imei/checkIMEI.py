@@ -33,26 +33,7 @@ async def check_imei(request: Request):
     
     handle_401_response(request_headers)
 
-    imei_check_headers: dict = {
-        'Authorization': f'Bearer {imei_check_api_token}'
-    }
-    imei_check_body: dict = {
-        'deviceId': imei,
-        'serviceId': DEFAULT_SERVICE_ID,
-    }
-    
-    api_headers: dict = {
-        'Authorization': request_headers.get('authorization'),
-    }
-    api_body: dict = {
-        'imei': imei,
-    }
-            
-    server_response = requests.get(
-        url=url,
-        headers=api_headers,
-        json=api_body,
-    )
+    response = request_imei_check(request_headers, request_body)
 
     return to_imei_check(imei_check_response.json())
 
