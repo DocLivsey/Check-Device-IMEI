@@ -1,5 +1,6 @@
 import requests
 import structlog
+from pydantic import ValidationError
 from fastapi import APIRouter, Request, HTTPException, status
 
 from v1.functiontools import handle_401_response
@@ -92,6 +93,33 @@ def request_imei_check(request_headers, request_body):
             }
             
             response = handle_imei_check_request(url=imei_check_url, headers=imei_check_headers, body=imei_check_body)
+            body = response.json()
+            
+            response = handle_server_POST_request(url=url, headers=headers, body=body)
+            
+            if response.status_code == status.HTTP_201_CREATED:
+                logger.info(
+                    'Successfully saved entry about device in the database',
+                    imei=imei,
+                    endpoint=url,
+                    headers=headers,
+                    body=body,
+                )
+            
+            else:
+                logger.error(
+                    'Failed to save entry about device in the database',
+                    imei=imei,
+                    endpoint=url,
+                    headers=headers,
+                    body=body,
+                )
+                
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail='Failed to save entry about device in the database',
+                )
+        
             
 
 
@@ -105,9 +133,27 @@ def handle_server_POST_request(url: str, headers: dict, body: dict) -> requests.
     return handle_request(url, headers, body, Methods.POST, debug_log_text)
 
 
-def handle_imei_check_request(url: str, headers: dict, body: dict) -> requests.Response:
+def handle_imei_check_request(url: str, headers: dict, body: dict) -> IMEICheckScheme:
     dedug_log_text = 'Get data from bot`s request and trying to Send POST request to get info about device'
-    return handle_request(url, headers, body, Methods.POST, dedug_log_text)
+    response = handle_request(url, headers, body, Methods.POST, dedug_log_text)
+    
+    imei_data: IMEICheckScheme
+    try:
+        imei_data = to_imei_check(response.json())
+        
+    except ValidationError as validation_error:
+        logger.error(
+            'Failed to mapping from object to DTO',
+            validation_error=str(validation_error),
+            data=response.json(),
+        )
+        
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f'Failed to mapping from object {response.json()} to DTO',
+        )
+        
+    return imei_data
 
 
 def handle_request(
