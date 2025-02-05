@@ -97,17 +97,17 @@ def request_imei_check(request_headers, request_body):
 
 def handle_server_GET_request(url: str, headers: dict, body: dict) -> requests.Response:
     debug_log_text = 'Get data from bot`s request and trying to Send GET request to server`s REST to get info about device from database'
-    handle_request(url, headers, body, Methods.GET, debug_log_text)
+    return handle_request(url, headers, body, Methods.GET, debug_log_text)
 
 
 def handle_server_POST_request(url: str, headers: dict, body: dict) -> requests.Response:
     debug_log_text = 'Sending data to server by POST request to save entry about device'
-    handle_request(url, headers, body, Methods.POST, debug_log_text)
+    return handle_request(url, headers, body, Methods.POST, debug_log_text)
 
 
 def handle_imei_check_request(url: str, headers: dict, body: dict) -> requests.Response:
     dedug_log_text = 'Get data from bot`s request and trying to Send POST request to get info about device'
-    handle_request(url, headers, body, Methods.POST, dedug_log_text)
+    return handle_request(url, headers, body, Methods.POST, dedug_log_text)
 
 
 def handle_request(
