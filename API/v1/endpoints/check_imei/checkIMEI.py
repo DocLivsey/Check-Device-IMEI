@@ -6,7 +6,7 @@ from v1.functiontools import handle_401_response
 
 logger = structlog.get_logger(__name__)
 
-from v1.schemas.checkIMEI import IMEICheckScheme, to_imei_check
+from v1.schemas.checkIMEI import IMEICheckScheme
 from settings import server_host, api_base_path, api_version, imei_check_api_token
 
 check_imei_router = APIRouter()
@@ -38,7 +38,6 @@ async def check_imei(request: Request):
         'deviceId': imei,
         'serviceId': DEFAULT_SERVICE_ID,
     }
-    print(type(imei))
     try:
         logger.debug(
             'Get data from bot`s request and trying to Send POST request to get info about device',
@@ -93,4 +92,4 @@ async def check_imei(request: Request):
             detail=response.json()
         )
 
-    return to_imei_check(response.json())
+    return IMEICheckScheme.to_scheme(response.json())
