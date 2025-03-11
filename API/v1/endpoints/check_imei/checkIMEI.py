@@ -92,4 +92,4 @@ async def check_imei(request: Request):
             detail=response.json()
         )
 
-    return IMEICheckScheme.to_scheme(response.json())
+    return IMEICheckScheme.to_response(response.json())

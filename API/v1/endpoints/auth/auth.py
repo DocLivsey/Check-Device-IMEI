@@ -117,4 +117,4 @@ async def telegram_token_auth(from_user_data: TelegramUserSchema):
         data_from_user=from_user_data,
     )
         
-    return to_token(response.json())
+    return TokenSchema.to_response(response.json())

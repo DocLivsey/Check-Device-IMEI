@@ -8,7 +8,7 @@ class TelegramUserSchema(BaseModel):
     last_name: str
 
     @staticmethod
-    def to_scheme(data: dict):
+    def to_response(data: dict):
         return TelegramUserSchema(**data)
     
 
@@ -17,5 +17,5 @@ class TokenSchema(BaseModel):
     user: TelegramUserSchema
 
     @staticmethod
-    def to_scheme(data: dict):
+    def to_response(data: dict):
         return TokenSchema(**data)

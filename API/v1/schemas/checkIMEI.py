@@ -18,7 +18,7 @@ class ServiceScheme(BaseModel):
     price: str
     
     @staticmethod
-    def to_scheme(data: dict):
+    def to_response(data: dict):
         return ServiceScheme(**data)
 
 
@@ -42,7 +42,7 @@ class PropertiesScheme(BaseModel):
     network: str
     
     @staticmethod
-    def to_scheme(data: dict):
+    def to_response(data: dict):
         return PropertiesScheme(**data)
 
 
@@ -58,5 +58,5 @@ class IMEICheckScheme(BaseModel):
     properties: PropertiesScheme
     
     @staticmethod
-    def to_scheme(data: dict):
+    def to_response(data: dict):
         return IMEICheckScheme(**data)
