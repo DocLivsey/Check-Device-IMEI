@@ -39,7 +39,7 @@ class IMEICheckView(APIView):
             imei = request.data['imei']
 
             device_data = IMEICheck.objects.filter(device_id=imei)
-            imei_check_response = IMEICheckResponse.to_imei_check_response(device_data)
+            imei_check_response = IMEICheckResponse.to_response(device_data)
 
             return Response(
                 {'IMEICheckResponse': imei_check_response},
@@ -64,19 +64,10 @@ class IMEICheckView(APIView):
         try:
             imei_check_response = IMEICheckResponse.from_data(request.data)
 
-            imei_check = IMEICheck.objects.create(
-                id=imei_check_response.id,
-                type=imei_check_response.type,
-                status=imei_check_response.status,
-                order_id=imei_check_response.order_id,
-                service=imei_check_response.service,
-                amount=imei_check_response.amount,
-                processed_at=imei_check_response.processed_at,
-                properties=imei_check_response.properties,
-            )
+            imei_check = IMEICheck.objects.create(**imei_check_response.model_dump())
             imei_check.save()
 
-            imei_check_response = IMEICheckResponse.to_imei_check_response(imei_check)
+            imei_check_response = IMEICheckResponse.to_response(imei_check)
         except Exception as exception:
             return Response(
                 {'message': str(exception)},

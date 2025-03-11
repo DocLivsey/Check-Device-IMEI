@@ -20,6 +20,9 @@ class Service(models.Model):
     title = models.CharField(max_length=100)
     price = models.CharField(max_length=10)
 
+    def dict(self):
+        return {field[0]: field[1] for field in self.__dict__.items()}
+
 
 class Property(models.Model):
     device_name = models.CharField(max_length=100)
@@ -39,6 +42,9 @@ class Property(models.Model):
     lost_mode = models.CharField(max_length=100)
     usa_block_status = models.CharField(max_length=100)
     network = models.CharField(max_length=100)
+
+    def dict(self):
+        return {field[0]: field[1] for field in self.__dict__.items()}
 
 
 class IMEICheck(models.Model):
@@ -86,4 +92,5 @@ class IMEICheck(models.Model):
         related_name='checks'
     )
 
-
+    def dict(self):
+        return {field[0]: field[1] for field in self.__dict__.items()}
